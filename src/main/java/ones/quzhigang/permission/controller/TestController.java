@@ -12,6 +12,8 @@
 package ones.quzhigang.permission.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import ones.quzhigang.permission.common.JsonData;
+import ones.quzhigang.permission.exception.PermissionException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,10 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 public class TestController {
 
-    @RequestMapping("/hello")
+    @RequestMapping("/hello.json")
     @ResponseBody
-    public String hello(){
+    public JsonData hello(){
         log.info("hello");
-        return "hello";
+        throw new PermissionException("test exception");
+        //return JsonData.sucess("hello");
     }
 }
