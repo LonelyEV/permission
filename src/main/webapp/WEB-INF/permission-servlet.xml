@@ -10,9 +10,15 @@
     <!-- 启动注解形式的 spring mvc -->
     <mvc:annotation-driven/>
 
+    <mvc:interceptors>
+        <bean class="ones.quzhigang.permission.interceptor.HttpInterceptor"/>
+    </mvc:interceptors>
+
     <!-- 启动包扫描功能 -->
     <context:component-scan base-package="ones.quzhigang.permission.controller" />
     <context:component-scan base-package="ones.quzhigang.permission.service" />
+
+    <bean class="ones.quzhigang.permission.common.ApplicationContextHelper" lazy-init="false"></bean>
 
 
     <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />-->
