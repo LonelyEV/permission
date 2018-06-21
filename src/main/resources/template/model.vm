@@ -1,0 +1,29 @@
+package ones.quzhigang.permission.model;
+
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class $!{classNameUpCase}Model implements Serializable{
+	
+	 
+	 #foreach($f in ${filds})
+	 	private $!{f.type} $!{f.fild};
+	 #end
+
+##	#foreach($f in $!{filds})
+##		public void set${f.property}(${f.type} ${f.fild}){
+##			this.${f.fild}=${f.fild};
+##		}
+##
+##
+##	    public ${f.type} get${f.property}(){
+##          return ${f.fild};
+##	    }
+##
+##
+##	#end
+
+		
+}

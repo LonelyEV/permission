@@ -1,0 +1,30 @@
+package ones.quzhigang.permission.query;
+
+import lombok.Data;
+
+import ones.quzhigang.permission.common.PaginationQuery;
+import java.io.Serializable;
+
+@Data
+public class $!{classNameUpCase}Query extends PaginationQuery implements Serializable {
+	
+	 
+	 #foreach($f in ${filds})
+	 	private $!{f.type} $!{f.fild};
+	 #end
+
+##	#foreach($f in $!{filds})
+##		public void set${f.property}(${f.type} ${f.fild}){
+##			this.${f.fild}=${f.fild};
+##		}
+##
+##
+##	    public ${f.type} get${f.property}(){
+##          return ${f.fild};
+##	    }
+##
+##
+##	#end
+
+		
+}
