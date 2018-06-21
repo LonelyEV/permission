@@ -1,0 +1,77 @@
+package ones.quzhigang.permission.service.impl;
+
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ones.quzhigang.permission.mapper.$!{classNameUpCase}Mapper;
+import ones.quzhigang.permission.model.$!{classNameUpCase}Model;
+
+import ones.quzhigang.permission.query.$!{classNameUpCase}Query;
+import ones.quzhigang.permission.service.$!{classNameUpCase}Service;
+
+    
+@Service
+public class $!{classNameUpCase}ServiceImpl implements $!{classNameUpCase}Service{
+	@Autowired
+	private $!{classNameUpCase}Mapper $!{classNameLowCase}Mapper;
+
+	
+	//根据ID查询指定的数据
+    @Override
+	public $!{classNameUpCase}Model getById(long id){ 
+		return $!{classNameLowCase}Mapper.getById(id);
+	}
+	
+	//删除
+    @Override
+	public void delById(long id){
+	    #if($!{isDatabaseShard} == true)
+		   DatabaseShard.setUserName(query.getCurrentUserName());
+		#end
+		$!{classNameLowCase}Mapper.delById(id);
+	}
+	
+	//新增
+    @Override
+	public long insert($!{classNameUpCase}Model $!{classNameLowCase}){	
+	    #if($!{isDatabaseShard} == true)
+		   DatabaseShard.setUserName(query.getCurrentUserName());
+		#end
+		return $!{classNameLowCase}Mapper.insert($!{classNameLowCase});
+		
+	}
+	
+	//修改
+    @Override
+	public long update($!{classNameUpCase}Model $!{classNameLowCase}){
+	    #if($!{isDatabaseShard} == true)
+		   DatabaseShard.setUserName(query.getCurrentUserName());
+		#end
+		return $!{classNameLowCase}Mapper.update($!{classNameLowCase});
+	}
+	
+	//高级查询 
+	@Override
+	public List<$!{classNameUpCase}Model> fetchPageAdvance($!{classNameUpCase}Query query) {
+	    #if($!{isDatabaseShard} == true)
+		   DatabaseShard.setUserName(query.getCurrentUserName());
+		#end
+		return $!{classNameLowCase}Mapper.fetchPageAdvance(query);
+	}
+	
+	//高级查询总记录数
+	@Override
+	public int fetchPageAdvanceCount($!{classNameUpCase}Query query) {
+	    #if($!{isDatabaseShard} == true)
+		   DatabaseShard.setUserName(query.getCurrentUserName());
+		#end
+		return $!{classNameLowCase}Mapper.fetchPageAdvanceCount(query);
+	}
+
+	
+	
+
+}
