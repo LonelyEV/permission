@@ -2,6 +2,7 @@ package ones.quzhigang.permission.service;
 
 import ones.quzhigang.permission.model.SysDeptModel;
 import ones.quzhigang.permission.query.SysDeptQuery;
+import ones.quzhigang.permission.vo.DepartmmentVo;
 
 import java.util.List;
 
@@ -46,11 +47,11 @@ public interface SysDeptService{
 	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
 	 *
 	 * @author 系统生成   
-	 * @param sysDept
+	 * @param vo
 	 * @return
 	 * @since JDK 1.8
 	 */
-	 long insert(SysDeptModel sysDept);
+	 long insert(DepartmmentVo vo);
 	
 	/**
 	 * 
@@ -61,11 +62,11 @@ public interface SysDeptService{
 	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
 	 *
 	 * @author 系统生成 
-	 * @param sysDept
+	 * @param vo
 	 * @return
 	 * @since JDK 1.8
 	 */
-	 long update(SysDeptModel sysDept);
+	 long update(DepartmmentVo vo);
 	
 	/**
 	 * 

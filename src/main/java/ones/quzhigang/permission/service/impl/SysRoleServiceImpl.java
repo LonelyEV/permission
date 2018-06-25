@@ -35,7 +35,6 @@ public class SysRoleServiceImpl implements SysRoleService{
     @Override
 	public long insert(SysRoleModel sysRole){	
 	    		return sysRoleMapper.insert(sysRole);
-		
 	}
 	
 	//修改

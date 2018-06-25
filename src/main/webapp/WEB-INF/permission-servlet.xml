@@ -10,6 +10,7 @@
     <!-- 启动注解形式的 spring mvc -->
     <mvc:annotation-driven/>
 
+    <!-- 自定义拦截器 -->
     <mvc:interceptors>
         <bean class="ones.quzhigang.permission.interceptor.HttpInterceptor"/>
     </mvc:interceptors>

@@ -1,11 +1,16 @@
 package ones.quzhigang.permission.query;
 
-import lombok.Data;
+import lombok.*;
 
 import ones.quzhigang.permission.common.PaginationQuery;
 import java.io.Serializable;
 
-@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Getter
+@Setter
 public class SysDeptQuery extends PaginationQuery implements Serializable {
 	
 	 

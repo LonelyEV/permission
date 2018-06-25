@@ -18,37 +18,37 @@ public interface  $!{classNameUpCase}Mapper{
 	
 
 																																																																																																																				
-	public String columns="$!{columns}";
-	
-	public String insert="$!{insert}";
-																																																																																																												
-	public String property="$!{property}";
-	
-	public String insertProperty="$!{insertProperty}";
-																																																																																																																				
-	public String update="$!{update}";
+	private static final String columns="$!{columns}";
+
+    private static final String insert="$!{insert}";
+
+    private static final String property="$!{property}";
+
+    private static final String insertProperty="$!{insertProperty}";
+
+    private static final String update="$!{update}";
 	
 	@Select("select "+columns+" from $!{talbeName} where ID=#{id}")
 	@ResultMap(value="ones.quzhigang.permission.mapper.$!{classNameUpCase}Mapper.$!{classNameUpCase}ModelMap")
-	public $!{classNameUpCase}Model getById(long id);
+    $!{classNameUpCase}Model getById(long id);
 	
 	@Insert("insert into $!{talbeName} ("+insert+") values ("+insertProperty+")")
 	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
-	public long insert($!{classNameUpCase}Model $!{classNameLowCase});
+    long insert($!{classNameUpCase}Model $!{classNameLowCase});
 
 	@Update("update $!{talbeName} set "+update+" where ID=#{id}")
-	public long update($!{classNameUpCase}Model $!{classNameLowCase}); 
+    long update($!{classNameUpCase}Model $!{classNameLowCase});
 	
 	@Delete("delete from $!{talbeName} where 1 = 1 and ID=#{id} ")
-	public void delById(long id);
+    void delById(long id);
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.$!{classNameUpCase}Provider.class,method="fetchPageAdvance")
 	@ResultMap(value="ones.quzhigang.permission.mapper.$!{classNameUpCase}Mapper.$!{classNameUpCase}ModelMap")
-	public List<$!{classNameUpCase}Model> fetchPageAdvance($!{classNameUpCase}Query query);  
+    List<$!{classNameUpCase}Model> fetchPageAdvance($!{classNameUpCase}Query query);
 	
 	
 	@SelectProvider(type=ones.quzhigang.permission.provider.$!{classNameUpCase}Provider.class,method="fetchPageAdvanceCount")
-	public int fetchPageAdvanceCount($!{classNameUpCase}Query query);
+	int fetchPageAdvanceCount($!{classNameUpCase}Query query);
 	
 	
 	
