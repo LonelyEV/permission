@@ -44,7 +44,7 @@ public class SysTreeService {
 
         }
 
-        return departmentLevelVoList;
+        return departmentList2Tree(departmentLevelVoList);
     }
 
     public List<DepartmentLevelVo> departmentList2Tree(List<DepartmentLevelVo> departmentLevelVoList){
@@ -70,12 +70,7 @@ public class SysTreeService {
         }
 
         //按照 seq 从大到小排列
-        Collections.sort(rootList, new Comparator<DepartmentLevelVo>() {
-            @Override
-            public int compare(DepartmentLevelVo o1, DepartmentLevelVo o2) {
-                return o1.getSeq() - o2.getSeq();
-            }
-        });
+        Collections.sort(rootList, deptSeqComparator);
 
 
         //递归生成树
@@ -114,6 +109,12 @@ public class SysTreeService {
         }
 
     }
+
+    public Comparator<DepartmentLevelVo> deptSeqComparator = new Comparator<DepartmentLevelVo>() {
+        public int compare(DepartmentLevelVo o1, DepartmentLevelVo o2) {
+            return o1.getSeq() - o2.getSeq();
+        }
+    };
 
 
 }

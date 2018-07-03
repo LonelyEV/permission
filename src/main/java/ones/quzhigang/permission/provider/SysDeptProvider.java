@@ -81,7 +81,7 @@ public class SysDeptProvider implements Serializable  {
 				"' and parent_id = "+parentId);
 
 		if(id != null){
-			sql.append(" and id = "+id);
+			sql.append(" and id <> "+id);
 		}
 
 		return sql.toString();

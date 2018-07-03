@@ -22,11 +22,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("department")
+@RequestMapping("sys/dept")
 @Slf4j
 public class DepartmentController {
 
@@ -35,6 +36,12 @@ public class DepartmentController {
 
     @Autowired
     private SysTreeService sysTreeService;
+
+
+    @RequestMapping("/page.page")
+    public ModelAndView page(){
+        return new ModelAndView("dept");
+    }
 
 
     /**
@@ -50,7 +57,7 @@ public class DepartmentController {
      */
     @RequestMapping("save.json")
     @ResponseBody
-    public JsonData save(@RequestBody  DepartmmentVo vo){
+    public JsonData save(DepartmmentVo vo){
 
         SysDeptService.insert(vo);
         return JsonData.sucess();
@@ -59,7 +66,7 @@ public class DepartmentController {
 
     @RequestMapping("/update.json")
     @ResponseBody
-    public JsonData update(@RequestBody DepartmmentVo vo){
+    public JsonData update(DepartmmentVo vo){
         SysDeptService.update(vo);
         return JsonData.sucess();
     }
@@ -75,7 +82,7 @@ public class DepartmentController {
      * @Author: 屈志刚
      * @Date: 2018/6/22 0022 13:28
      */
-    @RequestMapping("/tree")
+    @RequestMapping("/tree.json")
     @ResponseBody
     public JsonData tree(){
 

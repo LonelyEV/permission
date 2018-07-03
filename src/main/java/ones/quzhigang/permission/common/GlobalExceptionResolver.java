@@ -12,6 +12,7 @@
 package ones.quzhigang.permission.common;
 
 import lombok.extern.slf4j.Slf4j;
+import ones.quzhigang.permission.exception.ParamException;
 import ones.quzhigang.permission.exception.PermissionException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,7 +33,7 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
 
         // json数据请求，以 .json结尾
         if(requestUrl.endsWith(".json")){
-            if(e instanceof PermissionException){
+            if(e instanceof PermissionException || e instanceof ParamException){
                 result = JsonData.fail(e.getMessage());
                 modelAndView = new ModelAndView("jsonView", result.toMap());
             }else{

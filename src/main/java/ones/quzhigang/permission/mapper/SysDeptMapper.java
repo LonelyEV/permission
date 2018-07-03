@@ -57,7 +57,7 @@ public interface  SysDeptMapper{
 	void batchUpdateLevel(Map<String, List<SysDeptModel>> map);
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysDeptProvider.class,method="countByNameAndParentId")
-	int countByNameAndParentId(@Param("parentId") long parentId, @Param("name") String name, @Param("id") Long id);
+	int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Long id);
 	
 	
 }
