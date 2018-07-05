@@ -13,6 +13,7 @@ package ones.quzhigang.permission.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import ones.quzhigang.permission.common.JsonMapper;
+import ones.quzhigang.permission.common.RequestHolder;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -38,7 +39,7 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
         String requestUrl = request.getRequestURI();
         Map parameterMap = request.getParameterMap();
         log.info("request finished url:{}, params:{}", requestUrl, JsonMapper.obj2String(parameterMap));
-
+        removeThreadlocalhandle();
     }
 
     @Override
@@ -46,6 +47,12 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
         String requestUrl = request.getRequestURI();
         Map parameterMap = request.getParameterMap();
         log.info("request complete url:{}, params:{}", requestUrl, JsonMapper.obj2String(parameterMap));
+        removeThreadlocalhandle();
 
     }
+
+    private void removeThreadlocalhandle(){
+        RequestHolder.remove();
+    }
+
 }

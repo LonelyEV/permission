@@ -309,6 +309,7 @@
         }
 
         function handleDepSelected(deptId) {
+            debugger;
             if (lastClickDeptId != -1) {
                 var lastDept = $("#dept_" + lastClickDeptId + " .dd2-content:first");
                 lastDept.removeClass("btn-yellow");
@@ -337,6 +338,7 @@
             })
         }
 
+        // 渲染用户列表及参数
         function renderUserListAndPage(result, url) {
             if (result.ret) {
                 if (result.data.total > 0){
@@ -390,6 +392,7 @@
                 },
                 buttons : {
                     "添加": function(e) {
+                        debugger;
                         e.preventDefault();
                         updateUser(true, function (data) {
                             $("#dialog-user-form").dialog("close");
@@ -494,6 +497,7 @@
         });
 
         function recursiveRenderDeptSelect(deptList, level) {
+            debugger
             level = level | 0;
             if (deptList && deptList.length > 0) {
                 $(deptList).each(function (i, dept) {
@@ -506,8 +510,8 @@
                         blank += "∟";
                     }
                     optionStr += Mustache.render("<option value='{{id}}'>{{name}}</option>", {id: dept.id, name: blank + dept.name});
-                    if (dept.deptList && dept.deptList.length > 0) {
-                        recursiveRenderDeptSelect(dept.deptList, level + 1);
+                    if (dept.departmentLevelList && dept.departmentLevelList.length > 0) {
+                        recursiveRenderDeptSelect(dept.departmentLevelList, level + 1);
                     }
                 });
             }

@@ -6,7 +6,9 @@ import java.util.*;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import ones.quzhigang.permission.common.BeanValidator;
+import ones.quzhigang.permission.common.RequestHolder;
 import ones.quzhigang.permission.exception.ParamException;
+import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.LevelUtil;
 import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
 import ones.quzhigang.permission.vo.DepartmmentVo;
@@ -59,8 +61,8 @@ public class SysDeptServiceImpl implements SysDeptService{
 				.parentId(vo.getParentId()).seq(vo.getSeq()).remark(vo.getRemark()).build();
 
 		sysDeptModel.setLevel(LevelUtil.calculatelevel(getLevel(vo.getParentId()), vo.getParentId()));
-		sysDeptModel.setOperator("system");
-		sysDeptModel.setOperateIp("127.0.0.1");
+		sysDeptModel.setOperator(RequestHolder.getCurrentUser().getUsername());
+		sysDeptModel.setOperateIp(IpUtil.getUserIP(RequestHolder.getCurrentRequest()));
 		sysDeptModel.setOperateTime(SimpleDataFormatUtil.format(new Date(), SimpleDataFormatUtil.DEFAULT_PATTERN));
 
     	return sysDeptMapper.insert(sysDeptModel);
@@ -101,8 +103,8 @@ public class SysDeptServiceImpl implements SysDeptService{
 				.parentId(vo.getParentId()).seq(vo.getSeq()).remark(vo.getRemark()).build();
 
 		after.setLevel(LevelUtil.calculatelevel(getLevel(vo.getParentId()),vo.getParentId()));
-		after.setOperator("system-updata");
-		after.setOperateIp("127.0.0.1");
+		after.setOperator(RequestHolder.getCurrentUser().getUsername());
+		after.setOperateIp(IpUtil.getUserIP(RequestHolder.getCurrentRequest()));
 		after.setOperateTime(SimpleDataFormatUtil.format(new Date(), SimpleDataFormatUtil.DEFAULT_PATTERN));
 
 		updateWithChild(before, after);

@@ -58,6 +58,6 @@ public interface  SysDeptMapper{
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysDeptProvider.class,method="countByNameAndParentId")
 	int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Long id);
-	
-	
+
+
 }

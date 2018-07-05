@@ -1,5 +1,5 @@
-<%@ page import="com.mmall.common.RequestHolder" %>
-<%@ page import="com.mmall.model.SysUser" %>
+<%@ page import="ones.quzhigang.permission.common.RequestHolder" %>
+<%@ page import="ones.quzhigang.permission.model.SysUserModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                         <span class="user-info">
                             <small>欢迎,</small>
-                            Admin
+                            ${userName}
                         </span>
                         <i class="ace-icon fa fa-caret-down"></i>
                     </a>

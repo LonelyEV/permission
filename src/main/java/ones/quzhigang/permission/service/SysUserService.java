@@ -1,7 +1,10 @@
 package ones.quzhigang.permission.service;
 
+import ones.quzhigang.permission.beans.PageQuery;
+import ones.quzhigang.permission.beans.PageResult;
 import ones.quzhigang.permission.model.SysUserModel;
 import ones.quzhigang.permission.query.SysUserQuery;
+import ones.quzhigang.permission.vo.UserVo;
 
 import java.util.List;
 
@@ -46,11 +49,11 @@ public interface SysUserService{
 	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
 	 *
 	 * @author 系统生成   
-	 * @param sysUser
+	 * @param userVo
 	 * @return
 	 * @since JDK 1.8
 	 */
-	 long insert(SysUserModel sysUser);
+	 long insert(UserVo userVo);
 	
 	/**
 	 * 
@@ -61,11 +64,11 @@ public interface SysUserService{
 	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
 	 *
 	 * @author 系统生成 
-	 * @param sysUser
+	 * @param userVo
 	 * @return
 	 * @since JDK 1.8
 	 */
-	 long update(SysUserModel sysUser);
+	 long update(UserVo userVo);
 	
 	/**
 	 * 
@@ -96,6 +99,12 @@ public interface SysUserService{
 	 * @since JDK 1.8
 	 */
 	 int fetchPageAdvanceCount(SysUserQuery query);
+
+	SysUserModel findByKeyWords(String keyWords);
+
+	PageResult<SysUserModel> getPageByDeptId(Integer deptId, PageQuery query);
+
+	int countByDeptId(Integer deptId);
 	
 	
 

@@ -73,6 +73,16 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <filter>
+    <filter-name>loginFilter</filter-name>
+    <filter-class>ones.quzhigang.permission.filter.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>loginFilter</filter-name>
+    <url-pattern>/sys/*</url-pattern>
+    <url-pattern>/admin/*</url-pattern>
+  </filter-mapping>
+
 
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

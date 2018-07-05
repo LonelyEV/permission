@@ -47,7 +47,7 @@
         <input type="text" id="inputEmail" class="form-control" placeholder="Email/Telephone" name="username" required autofocus value="${username}">
         <label for="inputPassword" class="sr-only">密码</label>
         <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required >
-        <div class="checkbox" style="color: red;">${error}</div>
+        <div class="checkbox" style="color: red;">${errorMsg}</div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">登 陆</button>
     </form>
 </div>
