@@ -1,14 +1,9 @@
 package ones.quzhigang.permission.mapper;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectKey;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
+import ones.quzhigang.permission.model.SysDeptModel;
+import org.apache.ibatis.annotations.*;
 
 import ones.quzhigang.permission.model.SysAclModuleModel;
 import ones.quzhigang.permission.query.SysAclModuleQuery;
@@ -49,6 +44,21 @@ public interface  SysAclModuleMapper{
 	
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysAclModuleProvider.class,method="fetchPageAdvanceCount")
 	public int fetchPageAdvanceCount(SysAclModuleQuery query);
+
+	@Select("select "+columns+" from tbl_sys_acl_module")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysAclModuleMapper.SysAclModuleModelMap")
+	List<SysAclModuleModel> getAllAclModules();
+
+	@Select("select "+columns+" from tbl_sys_acl_module where level like #{level} || '.%'")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysAclModuleMapper.SysAclModuleModelMap")
+	List<SysAclModuleModel> getChildAclModuleByLevel(@Param("level") String level);
+
+
+	@UpdateProvider(type=ones.quzhigang.permission.provider.SysAclModuleProvider.class,method="batchUpdateLevel")
+	void batchUpdateLevel(Map<String, List<SysAclModuleModel>> map);
+
+	@SelectProvider(type=ones.quzhigang.permission.provider.SysAclModuleProvider.class,method="countByNameAndParentId")
+	int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Long id);
 	
 	
 	

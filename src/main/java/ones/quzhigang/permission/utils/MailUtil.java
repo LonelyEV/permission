@@ -1,7 +1,7 @@
 package ones.quzhigang.permission.utils;
 
-import com.mmall.beans.Mail;
 import lombok.extern.slf4j.Slf4j;
+import ones.quzhigang.permission.beans.Mail;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -11,7 +11,6 @@ public class MailUtil {
 
     public static boolean send(Mail mail) {
 
-        // TODO
         String from = "";
         int port = 25;
         String host = "";

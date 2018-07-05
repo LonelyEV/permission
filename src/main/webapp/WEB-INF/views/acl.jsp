@@ -370,14 +370,14 @@
 
         function bindAclModuleClick() {
             $(".sub-aclModule").click(function (e) {
-               e.preventDefault();
-               e.stopPropagation();
-               $(this).parent().parent().parent().children().children(".aclModule-name").toggleClass("hidden");
-               if($(this).is(".fa-angle-double-down")) {
-                   $(this).removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
-               } else{
-                   $(this).removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
-               }
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).parent().parent().parent().children().children(".aclModule-name").toggleClass("hidden");
+                if($(this).is(".fa-angle-double-down")) {
+                    $(this).removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
+                } else{
+                    $(this).removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
+                }
             });
 
             $(".aclModule-name").click(function(e) {

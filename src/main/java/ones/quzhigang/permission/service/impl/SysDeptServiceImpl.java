@@ -54,8 +54,6 @@ public class SysDeptServiceImpl implements SysDeptService{
 		if(checkExist(vo.getParentId(), vo.getName(), vo.getId())){
 			throw  new ParamException("同一层级存在相同名称的部门名称!");
 		}
-		log.info(checkExist(vo.getParentId(), vo.getName(), vo.getId())+"");
-
 
 		SysDeptModel sysDeptModel = SysDeptModel.builder().name(vo.getName())
 				.parentId(vo.getParentId()).seq(vo.getSeq()).remark(vo.getRemark()).build();

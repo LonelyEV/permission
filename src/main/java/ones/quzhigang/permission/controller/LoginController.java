@@ -13,9 +13,11 @@ package ones.quzhigang.permission.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import ones.quzhigang.permission.common.JsonData;
 import ones.quzhigang.permission.mapper.SysUserMapper;
 import ones.quzhigang.permission.model.SysUserModel;
 import ones.quzhigang.permission.utils.MD5Util;
+import ones.quzhigang.permission.vo.DepartmentLevelVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -86,4 +89,5 @@ public class LoginController {
         response.sendRedirect(path);
 
     }
+
 }

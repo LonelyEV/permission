@@ -2,6 +2,8 @@ package ones.quzhigang.permission.service;
 
 import ones.quzhigang.permission.model.SysAclModuleModel;
 import ones.quzhigang.permission.query.SysAclModuleQuery;
+import ones.quzhigang.permission.vo.AclModuleLevelVo;
+import ones.quzhigang.permission.vo.AclModuleVo;
 
 import java.util.List;
 
@@ -46,11 +48,11 @@ public interface SysAclModuleService{
 	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
 	 *
 	 * @author 系统生成   
-	 * @param sysAclModule
+	 * @param vo
 	 * @return
 	 * @since JDK 1.8
 	 */
-	 long insert(SysAclModuleModel sysAclModule);
+	 long insert(AclModuleVo vo);
 	
 	/**
 	 * 
@@ -61,11 +63,11 @@ public interface SysAclModuleService{
 	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
 	 *
 	 * @author 系统生成 
-	 * @param sysAclModule
+	 * @param vo
 	 * @return
 	 * @since JDK 1.8
 	 */
-	 long update(SysAclModuleModel sysAclModule);
+	 long update(AclModuleVo vo);
 	
 	/**
 	 * 
@@ -96,7 +98,7 @@ public interface SysAclModuleService{
 	 * @since JDK 1.8
 	 */
 	 int fetchPageAdvanceCount(SysAclModuleQuery query);
-	
+
 	
 
 }
