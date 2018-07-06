@@ -1,14 +1,8 @@
 package ones.quzhigang.permission.mapper;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectKey;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
+import ones.quzhigang.permission.beans.PageQuery;
+import org.apache.ibatis.annotations.*;
 
 import ones.quzhigang.permission.model.SysAclModel;
 import ones.quzhigang.permission.query.SysAclQuery;
@@ -49,6 +43,18 @@ public interface  SysAclMapper{
 	
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysAclProvider.class,method="fetchPageAdvanceCount")
 	public int fetchPageAdvanceCount(SysAclQuery query);
+
+	@Select("select count(1) from tbl_sys_acl where acl_module_id = #{aclModuleId} ")
+	public int countByAclModuleId(@Param("aclModuleId") Integer aclModuleId);
+
+	@Select("select "+columns+" from tbl_sys_acl where 1=1 and  acl_module_id=#{aclModuleId} order by seq,name ASC  limit #{query.offset}," +
+			"#{query.pageSize} ")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysAclMapper.SysAclModelMap")
+	public List<SysAclModel> getPageByaclModuleId(@Param("aclModuleId") Integer aclModuleId, @Param("query") PageQuery query);
+
+
+	@SelectProvider(type=ones.quzhigang.permission.provider.SysAclProvider.class,method="countByNameAndAclModuleId")
+	public int countByNameAndAclModuleId(@Param("aclModuleId") Integer aclModuleId, @Param("name") String name, @Param("id") Long id);
 	
 	
 	

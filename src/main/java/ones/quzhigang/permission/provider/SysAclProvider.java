@@ -40,6 +40,19 @@ public class SysAclProvider implements Serializable  {
 		
 		return sql.toString();
 	}
+
+	public String countByNameAndAclModuleId(long aclModuleId, String name, Long id){
+		StringBuffer sql=new StringBuffer("select count(1) from tbl_sys_acl where 1 = 1 " +
+				"and name = '"+name+
+				"' and acl_module_id = "+aclModuleId);
+
+		if(id != null){
+			sql.append(" and id <> "+id);
+		}
+
+		return sql.toString();
+
+	}
 	
 	
 	

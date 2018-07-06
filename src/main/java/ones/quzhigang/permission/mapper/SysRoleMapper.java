@@ -1,14 +1,7 @@
 package ones.quzhigang.permission.mapper;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectKey;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import ones.quzhigang.permission.model.SysRoleModel;
 import ones.quzhigang.permission.query.SysRoleQuery;
@@ -49,6 +42,13 @@ public interface  SysRoleMapper{
 	
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysRoleProvider.class,method="fetchPageAdvanceCount")
 	public int fetchPageAdvanceCount(SysRoleQuery query);
+
+	@Select("select "+columns+" from tbl_sys_role ")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysRoleMapper.SysRoleModelMap")
+	public List<SysRoleModel> getAll();
+
+	@SelectProvider(type=ones.quzhigang.permission.provider.SysRoleProvider.class,method="countByNameAndId")
+	public int countByNameAndId(@Param("name") String name, @Param("id") Long id);
 	
 	
 	

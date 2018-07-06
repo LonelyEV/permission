@@ -481,6 +481,7 @@
 
         function renderAclListAndPage(result, url) {
             if(result.ret) {
+                debugger;
                 if (result.data.total > 0){
                     var rendered = Mustache.render(aclListTemplate, {
                         aclList: result.data.data,

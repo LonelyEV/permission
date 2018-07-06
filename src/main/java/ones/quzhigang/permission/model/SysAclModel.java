@@ -1,10 +1,15 @@
 package ones.quzhigang.permission.model;
 
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Getter
+@Setter
 public class SysAclModel implements Serializable{
 	
 	 

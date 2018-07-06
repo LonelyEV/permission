@@ -23,19 +23,19 @@ import java.util.Map;
 @Slf4j
 public class SimpleDataFormatUtil {
 
-    private static final String DATE_SDF = "yyyy-MM-dd";
+    public static final String DATE_SDF = "yyyy-MM-dd";
 
-    private static final String yyyyMMdd = "yyyyMMdd";
+    public static final String yyyyMMdd = "yyyyMMdd";
 
-    private static final String DATE_SDF_WZ = "yyyy年MM月dd日";
+    public static final String DATE_SDF_WZ = "yyyy年MM月dd日";
 
-    private static final String TIME_SDF = "yyyy-MM-dd HH:mm";
+    public static final String TIME_SDF = "yyyy-MM-dd HH:mm";
 
-    private static final String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
+    public static final String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
 
-    private static final String SHORT_TIME_SDF = "HH:mm";
+    public static final String SHORT_TIME_SDF = "HH:mm";
 
-    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static final String DEFAULT_PATTERN = "default";
 

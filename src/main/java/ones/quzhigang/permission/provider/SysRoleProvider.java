@@ -40,6 +40,20 @@ public class SysRoleProvider implements Serializable  {
 		
 		return sql.toString();
 	}
+
+	public String countByNameAndId(String name, Long id){
+		StringBuffer sql=new StringBuffer("select count(1) from tbl_sys_role where 1 = 1 " +
+				"and name = ");
+		sql.append("'").append(name).append("'");
+
+		if(id != null){
+			sql.append(" and id <> ");
+			sql.append(id);
+		}
+
+		return sql.toString();
+
+	}
 	
 	
 	

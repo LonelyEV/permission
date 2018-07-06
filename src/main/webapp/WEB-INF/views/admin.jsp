@@ -31,7 +31,9 @@
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                         <span class="user-info">
                             <small>欢迎,</small>
-                            ${userName}
+                            <%
+                            %>
+
                         </span>
                         <i class="ace-icon fa fa-caret-down"></i>
                     </a>
