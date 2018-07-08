@@ -39,8 +39,7 @@ public interface  SysDeptMapper{
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysDeptProvider.class,method="fetchPageAdvance")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysDeptMapper.SysDeptModelMap")
 	List<SysDeptModel> fetchPageAdvance(SysDeptQuery query);
-	
-	
+
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysDeptProvider.class,method="fetchPageAdvanceCount")
 	int fetchPageAdvanceCount(SysDeptQuery query);
 
@@ -52,12 +51,14 @@ public interface  SysDeptMapper{
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysDeptMapper.SysDeptModelMap")
 	List<SysDeptModel> getChildDepartmentByLevel(@Param("level") String level);
 
-
 	@UpdateProvider(type=ones.quzhigang.permission.provider.SysDeptProvider.class,method="batchUpdateLevel")
 	void batchUpdateLevel(Map<String, List<SysDeptModel>> map);
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysDeptProvider.class,method="countByNameAndParentId")
 	int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Long id);
+
+	@Select("select count(1) from tbl_sys_dept where parent_id = #{deptId} ")
+	int countByPerentId(@Param("deptId") long deptId);
 
 
 }

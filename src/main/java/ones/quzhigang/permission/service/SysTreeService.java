@@ -48,6 +48,23 @@ public class SysTreeService {
     @Autowired
     private SysAclMapper sysAclMapper;
 
+    public List<AclModuleLevelVo> userAclTree(Long userId){
+
+        // 当前用户已分配的权限点
+        List<SysAclModel> userAclList = sysCoreService.getuserAclList(userId);
+
+        List<AclRoleVo> aclVoList = Lists.newArrayList();
+
+        for(SysAclModel sysAclModel : userAclList){
+            AclRoleVo aclRoleVo = AclRoleVo.adept(sysAclModel);
+            aclRoleVo.setHasAcl(true);
+            aclRoleVo.setChecked(true);
+            aclVoList.add(aclRoleVo);
+        }
+
+        return aclList2Tree(aclVoList);
+    }
+
     /**
      * 功能描述: <br>
      * 〈获取角色权限树〉

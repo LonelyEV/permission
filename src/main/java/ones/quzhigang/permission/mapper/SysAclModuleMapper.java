@@ -59,8 +59,9 @@ public interface  SysAclModuleMapper{
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysAclModuleProvider.class,method="countByNameAndParentId")
 	int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Long id);
-	
-	
-	
-	
+
+	@Select("select count(1) from tbl_sys_acl_module where parent_id = #{aclModuleId} ")
+	int countByParentId(@Param("aclModuleId") long aclModuleId);
+
+
 }

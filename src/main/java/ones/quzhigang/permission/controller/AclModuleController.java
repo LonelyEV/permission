@@ -19,6 +19,7 @@ import ones.quzhigang.permission.service.SysTreeService;
 import ones.quzhigang.permission.vo.AclModuleLevelVo;
 import ones.quzhigang.permission.vo.AclModuleVo;
 import ones.quzhigang.permission.vo.DepartmentLevelVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +65,13 @@ public class AclModuleController {
     public JsonData tree(){
         List<AclModuleLevelVo> aclModuleLevelVoList = sysTreeService.aclModuleTree();
         return JsonData.sucess(aclModuleLevelVoList);
+    }
+
+    @RequestMapping("/delete.json")
+    @ResponseBody
+    public JsonData delete(@Param("id") Long id){
+        SysAclModuleService.delById(id);
+        return JsonData.sucess();
     }
 
 

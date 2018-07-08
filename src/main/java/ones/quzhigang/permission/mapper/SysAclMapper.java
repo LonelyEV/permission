@@ -39,8 +39,7 @@ public interface  SysAclMapper{
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysAclProvider.class,method="fetchPageAdvance")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysAclMapper.SysAclModelMap")
 	List<SysAclModel> fetchPageAdvance(SysAclQuery query);
-	
-	
+
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysAclProvider.class,method="fetchPageAdvanceCount")
 	int fetchPageAdvanceCount(SysAclQuery query);
 
@@ -51,7 +50,6 @@ public interface  SysAclMapper{
 			"#{query.pageSize} ")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysAclMapper.SysAclModelMap")
 	List<SysAclModel> getPageByaclModuleId(@Param("aclModuleId") Integer aclModuleId, @Param("query") PageQuery query);
-
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysAclProvider.class,method="countByNameAndAclModuleId")
 	int countByNameAndAclModuleId(@Param("aclModuleId") Integer aclModuleId, @Param("name") String name, @Param("id") Long id);

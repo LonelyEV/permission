@@ -17,6 +17,8 @@
 		<result property="aclId" column="acl_id" javaType="Long"/>
 	</resultMap>
 
+
+
 </mapper>
 
 

@@ -12,18 +12,27 @@
 package ones.quzhigang.permission.controller;
 
 
+import ch.qos.logback.core.joran.spi.NoAutoStart;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import ones.quzhigang.permission.beans.PageQuery;
 import ones.quzhigang.permission.beans.PageResult;
 import ones.quzhigang.permission.common.JsonData;
 import ones.quzhigang.permission.model.SysAclModel;
+import ones.quzhigang.permission.model.SysRoleModel;
 import ones.quzhigang.permission.service.SysAclService;
+import ones.quzhigang.permission.service.SysRoleAclService;
+import ones.quzhigang.permission.service.SysRoleService;
 import ones.quzhigang.permission.vo.AclVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/sys/acl")
@@ -32,6 +41,9 @@ public class AclController {
 
     @Autowired
     private SysAclService sysAclService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
 
     @RequestMapping("/save.json")
@@ -55,6 +67,19 @@ public class AclController {
         PageResult<SysAclModel> result = sysAclService.getPageByAclModuleId(aclModuleId, query);
         return JsonData.sucess(result);
     }
+
+    @RequestMapping("/acls.json")
+    @ResponseBody
+    public JsonData acls(@Param("aclId") Long aclId){
+
+        List<SysRoleModel> sysRoleModelList = sysRoleService.getRoleIdListByAclId(aclId);
+
+        Map<String, Object> resultMap = Maps.newHashMap();
+        resultMap.put("roles", sysRoleModelList);
+        resultMap.put("users", sysRoleService.getUserListByRoleList(sysRoleModelList));
+        return JsonData.sucess(resultMap);
+    }
+
 
 
 }

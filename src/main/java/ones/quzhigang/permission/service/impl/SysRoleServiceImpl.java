@@ -3,14 +3,22 @@ package ones.quzhigang.permission.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import ones.quzhigang.permission.common.BeanValidator;
 import ones.quzhigang.permission.common.RequestHolder;
 import ones.quzhigang.permission.exception.PermissionException;
+import ones.quzhigang.permission.mapper.SysRoleUserMapper;
+import ones.quzhigang.permission.mapper.SysUserMapper;
+import ones.quzhigang.permission.model.SysUserModel;
 import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
+import ones.quzhigang.permission.utils.StringUtil;
 import ones.quzhigang.permission.vo.RoleVo;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +33,12 @@ import ones.quzhigang.permission.service.SysRoleService;
 public class SysRoleServiceImpl implements SysRoleService {
 	@Autowired
 	private SysRoleMapper sysRoleMapper;
+
+	@Autowired
+    private SysRoleUserMapper sysRoleUserMapper;
+
+	@Autowired
+    private SysUserMapper sysUserMapper;
 
 
 	//根据ID查询指定的数据
@@ -113,7 +127,58 @@ public class SysRoleServiceImpl implements SysRoleService {
 	    return sysRoleMapper.getAll();
     }
 
-	
-	
+    @Override
+    public List<SysRoleModel> getRolesByUserId(Long userId){
+        List<Long> roleIdList = sysRoleUserMapper.getRoleIdListByuser(userId);
 
+        if(CollectionUtils.isEmpty(roleIdList)){
+            return Lists.newArrayList();
+        }
+
+        // List<Long>  ==>>  List<String>
+        List<String> listIds = roleIdList.stream().map(s -> String.valueOf(s)).collect(Collectors.toList());
+        // List<String> ==>> "1,2,3,4..."
+        String ids = String.join(",", listIds);
+
+        return sysRoleMapper.getByIds(ids);
+
+    }
+
+    @Override
+    public List<SysRoleModel> getRoleIdListByAclId(long aclId) {
+
+        List<Long> roleIdList = sysRoleMapper.getRoleIdListByAclId(aclId);
+
+        if(CollectionUtils.isEmpty(roleIdList)){
+            return Lists.newArrayList();
+        }
+
+        // List<Long>  ==>>  List<String>
+        List<String> listIds = roleIdList.stream().map(s -> String.valueOf(s)).collect(Collectors.toList());
+        // List<String> ==>> "1,2,3,4..."
+        String ids = String.join(",", listIds);
+
+        return sysRoleMapper.getByIds(ids);
+    }
+
+    @Override
+    public List<SysUserModel> getUserListByRoleList(List<SysRoleModel> roleList) {
+
+        // List<Long>  ==>>  List<String>
+        List<String> roleIdList = roleList.stream().map(s -> String.valueOf(s.getId())).collect(Collectors.toList());
+        // List<String> ==>> "1,2,3,4..."
+        String roleIds = String.join(",", roleIdList);
+
+        if(StringUtils.isBlank(roleIds)){
+            return Lists.newArrayList();
+        }
+
+        List<SysUserModel> sysUserModelList = sysUserMapper.getUserByRoleIds(roleIds);
+
+        if(CollectionUtils.isEmpty(sysUserModelList)){
+            return Lists.newArrayList();
+        }
+
+        return sysUserModelList;
+    }
 }

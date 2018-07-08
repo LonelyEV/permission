@@ -48,4 +48,12 @@ public interface  SysRoleMapper{
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysRoleProvider.class,method="countByNameAndId")
 	int countByNameAndId(@Param("name") String name, @Param("id") Long id);
+
+	@Select("select "+columns+" from tbl_sys_role where ID in (${ids}) ")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysRoleMapper.SysRoleModelMap")
+	List<SysRoleModel> getByIds(@Param("ids") String ids);
+
+	@Select("select role_id from tbl_sys_role_acl where acl_id = ${aclId}")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysRoleMapper.SysRoleIdModelMap")
+	List<Long> getRoleIdListByAclId(@Param("aclId") long aclId);
 }

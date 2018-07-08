@@ -2,6 +2,7 @@ package ones.quzhigang.permission.service;
 
 import ones.quzhigang.permission.model.SysRoleAclModel;
 import ones.quzhigang.permission.query.SysRoleAclQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -98,6 +99,8 @@ public interface SysRoleAclService{
 	 int fetchPageAdvanceCount(SysRoleAclQuery query);
 
 	 void changeAcls(Long roleId, String aclsIds);
+
+
 	
 	
 

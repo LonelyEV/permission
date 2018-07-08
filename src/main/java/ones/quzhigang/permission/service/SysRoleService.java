@@ -1,6 +1,7 @@
 package ones.quzhigang.permission.service;
 
 import ones.quzhigang.permission.model.SysRoleModel;
+import ones.quzhigang.permission.model.SysUserModel;
 import ones.quzhigang.permission.query.SysRoleQuery;
 import ones.quzhigang.permission.vo.RoleVo;
 
@@ -100,6 +101,12 @@ public interface SysRoleService{
 
 
 	 List<SysRoleModel> getAll();
+
+	 List<SysRoleModel> getRolesByUserId(Long userId);
+
+	 List<SysRoleModel> getRoleIdListByAclId(long aclId);
+
+	 List<SysUserModel> getUserListByRoleList(List<SysRoleModel> roleList);
 	
 	
 

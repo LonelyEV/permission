@@ -21,7 +21,11 @@ public interface  SysUserMapper{
 	String insertProperty="#{username},#{telephone},#{mail},#{password},#{deptId},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
 																																																																																																																				
 	String update="username=#{username},telephone=#{telephone},mail=#{mail},password=#{password},dept_id=#{deptId},status=#{status},remark=#{remark},operator=#{operator},operate_time=#{operateTime},operate_ip=#{operateIp}";
-	
+
+	String getUser_By_RoleId_columns="t1.id,t1.username,t1.telephone,t1.mail,t1.password,t1.dept_id,t1.status,t1.remark,t1.operator,t1.operate_time,t1.operate_ip";
+
+	String getUser_By_RoleId_property="#{id},#{username},#{telephone},#{mail},#{password},#{deptId},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
+
 	@Select("select "+columns+" from tbl_sys_user where ID=#{id}")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
 	SysUserModel getById(long id);
@@ -60,7 +64,6 @@ public interface  SysUserMapper{
 	@Select("select count(1) from tbl_sys_user where  mail = #{mail} ")
 	int countByMailForNew(@Param("mail") String mail);
 
-
 	@Select("select "+columns+" from tbl_sys_user where 1=1 and  dept_id=#{deptId} order by username ASC limit #{query.offset}," +
 			"#{query.pageSize} ")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
@@ -69,7 +72,6 @@ public interface  SysUserMapper{
 	@Select("select count(1) from tbl_sys_user where dept_id = #{deptId} ")
 	int countByDeptId(@Param("deptId") Integer deptId);
 
-
 	@Select("select "+columns+" from tbl_sys_user where 1=1 and  id in (${ids})  ")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
 	List<SysUserModel> getByIds(@Param("ids") String ids);
@@ -77,5 +79,11 @@ public interface  SysUserMapper{
 	@Select("select "+columns+" from tbl_sys_user  ")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
 	List<SysUserModel> getAllUser();
+
+	@Select("select "+getUser_By_RoleId_columns+" from tbl_sys_user t1 " +
+			"where t1.id in ( select t2.user_id from tbl_sys_role_user t2 where t2.role_id in(${roleIds})) ")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
+	List<SysUserModel> getUserByRoleIds(@Param("roleIds") String roleIds);
+
 
 }

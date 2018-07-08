@@ -17,6 +17,7 @@ import ones.quzhigang.permission.service.SysDeptService;
 import ones.quzhigang.permission.service.SysTreeService;
 import ones.quzhigang.permission.vo.DepartmentLevelVo;
 import ones.quzhigang.permission.vo.DepartmmentVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -88,6 +89,13 @@ public class DepartmentController {
 
         List<DepartmentLevelVo> departmentLevelVoList = sysTreeService.deptTree();
         return JsonData.sucess(departmentLevelVoList);
+    }
+
+    @RequestMapping("/delete.json")
+    @ResponseBody
+    public JsonData delete(@Param("id") Long id){
+        SysDeptService.delById(id);
+        return JsonData.sucess();
     }
 
 
