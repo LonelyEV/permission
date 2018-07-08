@@ -68,4 +68,14 @@ public interface  SysUserMapper{
 
 	@Select("select count(1) from tbl_sys_user where dept_id = #{deptId} ")
 	int countByDeptId(@Param("deptId") Integer deptId);
+
+
+	@Select("select "+columns+" from tbl_sys_user where 1=1 and  id in (${ids})  ")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
+	List<SysUserModel> getByIds(@Param("ids") String ids);
+
+	@Select("select "+columns+" from tbl_sys_user  ")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
+	List<SysUserModel> getAllUser();
+
 }

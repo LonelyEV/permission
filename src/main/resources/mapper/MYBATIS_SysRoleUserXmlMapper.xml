@@ -17,6 +17,10 @@
 		<result property="id" column="id" javaType="long"/>
 	</resultMap>
 
+	<resultMap type="java.lang.Long" id="SysRoleUserIdModelMap">
+		<result property="userId" column="user_id" javaType="long"/>
+	</resultMap>
+
 </mapper>
 
 

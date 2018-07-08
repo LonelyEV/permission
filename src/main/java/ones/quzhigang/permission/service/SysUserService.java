@@ -1,5 +1,6 @@
 package ones.quzhigang.permission.service;
 
+import com.google.common.collect.Lists;
 import ones.quzhigang.permission.beans.PageQuery;
 import ones.quzhigang.permission.beans.PageResult;
 import ones.quzhigang.permission.model.SysUserModel;
@@ -105,6 +106,8 @@ public interface SysUserService{
 	PageResult<SysUserModel> getPageByDeptId(Integer deptId, PageQuery query);
 
 	int countByDeptId(Integer deptId);
+
+	List<SysUserModel> getAllUser();
 	
 	
 

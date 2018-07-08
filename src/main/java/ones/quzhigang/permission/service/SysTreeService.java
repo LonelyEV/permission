@@ -48,22 +48,30 @@ public class SysTreeService {
     @Autowired
     private SysAclMapper sysAclMapper;
 
-
+    /**
+     * 功能描述: <br>
+     * 〈获取角色权限树〉
+     *
+     * @param roleId
+     * @return: java.util.List<ones.quzhigang.permission.vo.AclModuleLevelVo>
+     * @@throws:
+     * @Version: 1.0.0
+     * @Author: 屈志刚
+     * @Date: 2018/7/8 0008 14:14
+     */
     public List<AclModuleLevelVo> roleTrss(Long roleId){
 
         // 当前用户已分配的权限点
         List<SysAclModel> userAclList = sysCoreService.getCurrentUserAclList();
         // 当前角色已分配的权限点
         List<SysAclModel> roleAclList = sysCoreService.getRoleAclList(roleId);
+        // 获取系统所有的权限点
+        List<SysAclModel> allAclList = sysAclMapper.getAll();
 
         Set<Long> userAclIdList = userAclList.stream().map(sysAclModel -> sysAclModel.getId()).collect(Collectors.toSet());
         Set<Long> roleAclIdList = roleAclList.stream().map(sysAclModel -> sysAclModel.getId()).collect(Collectors.toSet());
 
-
-        List<SysAclModel> allAclList = sysAclMapper.getAll();
-
         Set<SysAclModel> aclSet = new HashSet<>(allAclList);
-
         List<AclRoleVo> aclVoList = Lists.newArrayList();
 
         for(SysAclModel sysAclModel : aclSet){
@@ -72,18 +80,27 @@ public class SysTreeService {
             if(userAclIdList.contains(sysAclModel.getId())){
                 aclRoleVo.setHasAcl(true);
             }
-
             if(roleAclIdList.contains(sysAclModel.getId())){
                 aclRoleVo.setChecked(true);
             }
-
             aclVoList.add(aclRoleVo);
         }
-
         return aclList2Tree(aclVoList);
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈权限点列表转树菜单〉
+     *
+     * @param aclVoList
+     * @return: java.util.List<ones.quzhigang.permission.vo.AclModuleLevelVo>
+     * @@throws:
+     * @Version: 1.0.0
+     * @Author: 屈志刚
+     * @Date: 2018/7/8 0008 14:15
+     */
     private List<AclModuleLevelVo> aclList2Tree(List<AclRoleVo> aclVoList){
+
 
         if(CollectionUtils.isEmpty(aclVoList)){
             return Lists.newArrayList();
@@ -102,6 +119,18 @@ public class SysTreeService {
         return aclModuleTree;
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈绑定权限状态并排序〉
+     *
+     * @param aclModuleLevelVoList
+     * @param moduleIdAclMap
+     * @return: void
+     * @@throws:
+     * @Version: 1.0.0
+     * @Author: 屈志刚
+     * @Date: 2018/7/8 0008 14:16
+     */
     private void bindAclsWithOrder(List<AclModuleLevelVo> aclModuleLevelVoList, Multimap<Integer, AclRoleVo> moduleIdAclMap){
 
         if(CollectionUtils.isEmpty(aclModuleLevelVoList)){
@@ -218,9 +247,6 @@ public class SysTreeService {
             }
         }
     }
-
-
-
 
     /**
      * 功能描述: <br>

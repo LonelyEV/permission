@@ -1,6 +1,7 @@
 package ones.quzhigang.permission.service;
 
 import ones.quzhigang.permission.model.SysRoleUserModel;
+import ones.quzhigang.permission.model.SysUserModel;
 import ones.quzhigang.permission.query.SysRoleUserQuery;
 
 import java.util.List;
@@ -96,7 +97,9 @@ public interface SysRoleUserService{
 	 * @since JDK 1.8
 	 */
 	 int fetchPageAdvanceCount(SysRoleUserQuery query);
+
+	 List<SysUserModel> getListByRoleId(Long roleId);
 	
-	
+	 void changeRoleUsers(Long roleId, String userIds);
 
 }

@@ -144,6 +144,8 @@ public class SysUserServiceImpl implements SysUserService{
 		return sysUserMapper.findByKeyWords(keyWords);
 	}
 
+
+
 	@Override
 	public PageResult<SysUserModel> getPageByDeptId(Integer deptId, PageQuery query) {
 
@@ -163,6 +165,11 @@ public class SysUserServiceImpl implements SysUserService{
 	@Override
 	public int countByDeptId(Integer deptId) {
 		return sysUserMapper.countByDeptId(deptId);
+	}
+
+	@Override
+	public List<SysUserModel> getAllUser() {
+		return sysUserMapper.getAllUser();
 	}
 
 

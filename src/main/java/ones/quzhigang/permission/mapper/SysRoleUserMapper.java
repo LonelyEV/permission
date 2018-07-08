@@ -1,5 +1,6 @@
 package ones.quzhigang.permission.mapper;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.*;
 
@@ -45,4 +46,14 @@ public interface  SysRoleUserMapper{
 	@Select("select role_id from tbl_sys_role_user where user_id=#{userId}")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysRoleUserMapper.SysRoleUserRoleIdModelMap")
 	List<Long> getRoleIdListByuser(@Param("userId") long userId);
+
+	@Select("select user_id from tbl_sys_role_user where role_id=#{roleId}")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysRoleUserMapper.SysRoleUserIdModelMap")
+	List<Long> getUserIdByRoleId(long roleId);
+
+	@Delete("delete from tbl_sys_role_user where 1 = 1 and role_id=#{roleId} ")
+	void deleteByRoleId(@Param("roleId") long roleId);
+
+	@UpdateProvider(type=ones.quzhigang.permission.provider.SysRoleUserProvider.class,method="batchInsert")
+	void batchInsert(Map<String, List<SysRoleUserModel>> map);
 }

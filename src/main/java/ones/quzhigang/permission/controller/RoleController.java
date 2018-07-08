@@ -12,11 +12,12 @@
 package ones.quzhigang.permission.controller;
 
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import ones.quzhigang.permission.common.JsonData;
-import ones.quzhigang.permission.service.SysRoleAclService;
-import ones.quzhigang.permission.service.SysRoleService;
-import ones.quzhigang.permission.service.SysTreeService;
+import ones.quzhigang.permission.model.SysUserModel;
+import ones.quzhigang.permission.service.*;
 import ones.quzhigang.permission.vo.RoleVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -45,6 +48,12 @@ public class RoleController {
 
     @Autowired
     private SysRoleAclService sysRoleAclService;
+
+    @Autowired
+    private SysRoleUserService sysRoleUserService;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     @RequestMapping("/role.page")
     public ModelAndView role(){
@@ -81,6 +90,34 @@ public class RoleController {
     @ResponseBody
     public JsonData changeAcls(@Param("roleId") Long roleId, @RequestParam(value = "aclIds", required = false, defaultValue = "") String aclIds){
         sysRoleAclService.changeAcls(roleId, aclIds);
+        return JsonData.sucess();
+    }
+
+    @RequestMapping("/users.json")
+    @ResponseBody
+    public JsonData users(@RequestParam("roleId") Long roleId){
+        List<SysUserModel> selectUserList = sysRoleUserService.getListByRoleId(roleId);
+        List<SysUserModel> allUserList = sysUserService.getAllUser();
+        List<SysUserModel> unSelectUserList = Lists.newArrayList();
+
+        Set<Long> selectedUserIdSet = selectUserList.stream().map(sysUserModel -> sysUserModel.getId()).collect(Collectors.toSet());
+
+        for (SysUserModel sysUserModel : allUserList){
+            if(sysUserModel.getStatus() == 1 && !selectedUserIdSet.contains(sysUserModel.getId())){
+                unSelectUserList.add(sysUserModel);
+            }
+        }
+
+        Map<String, List<SysUserModel>> resultmap = Maps.newHashMap();
+        resultmap.put("selected", selectUserList);
+        resultmap.put("unselected", unSelectUserList);
+        return JsonData.sucess(resultmap);
+    }
+
+    @RequestMapping("/changeUsers.json")
+    @ResponseBody
+    public JsonData changeUser(@Param("roleId") Long roleId, @RequestParam(value = "userIds", required = false, defaultValue = "") String userIds){
+        sysRoleUserService.changeRoleUsers(roleId, userIds);
         return JsonData.sucess();
     }
 
