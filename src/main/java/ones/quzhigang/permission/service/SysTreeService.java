@@ -14,20 +14,23 @@ package ones.quzhigang.permission.service;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import ones.quzhigang.permission.mapper.SysAclMapper;
 import ones.quzhigang.permission.mapper.SysAclModuleMapper;
 import ones.quzhigang.permission.mapper.SysDeptMapper;
+import ones.quzhigang.permission.model.SysAclModel;
 import ones.quzhigang.permission.model.SysAclModuleModel;
 import ones.quzhigang.permission.model.SysDeptModel;
 import ones.quzhigang.permission.utils.LevelUtil;
 import ones.quzhigang.permission.vo.AclModuleLevelVo;
+import ones.quzhigang.permission.vo.AclRoleVo;
+import ones.quzhigang.permission.vo.AclVo;
 import ones.quzhigang.permission.vo.DepartmentLevelVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SysTreeService {
@@ -38,6 +41,82 @@ public class SysTreeService {
 
     @Autowired
     private SysAclModuleMapper sysAclModuleMapper;
+
+    @Autowired
+    private SysCoreService sysCoreService;
+
+    @Autowired
+    private SysAclMapper sysAclMapper;
+
+
+    public List<AclModuleLevelVo> roleTrss(Long roleId){
+
+        // 当前用户已分配的权限点
+        List<SysAclModel> userAclList = sysCoreService.getCurrentUserAclList();
+        // 当前角色已分配的权限点
+        List<SysAclModel> roleAclList = sysCoreService.getRoleAclList(roleId);
+
+        Set<Long> userAclIdList = userAclList.stream().map(sysAclModel -> sysAclModel.getId()).collect(Collectors.toSet());
+        Set<Long> roleAclIdList = roleAclList.stream().map(sysAclModel -> sysAclModel.getId()).collect(Collectors.toSet());
+
+
+        List<SysAclModel> allAclList = sysAclMapper.getAll();
+
+        Set<SysAclModel> aclSet = new HashSet<>(allAclList);
+
+        List<AclRoleVo> aclVoList = Lists.newArrayList();
+
+        for(SysAclModel sysAclModel : aclSet){
+            AclRoleVo aclRoleVo = AclRoleVo.adept(sysAclModel);
+
+            if(userAclIdList.contains(sysAclModel.getId())){
+                aclRoleVo.setHasAcl(true);
+            }
+
+            if(roleAclIdList.contains(sysAclModel.getId())){
+                aclRoleVo.setChecked(true);
+            }
+
+            aclVoList.add(aclRoleVo);
+        }
+
+        return aclList2Tree(aclVoList);
+    }
+
+    private List<AclModuleLevelVo> aclList2Tree(List<AclRoleVo> aclVoList){
+
+        if(CollectionUtils.isEmpty(aclVoList)){
+            return Lists.newArrayList();
+        }
+
+        List<AclModuleLevelVo> aclModuleTree = aclModuleTree();
+        Multimap<Integer, AclRoleVo> moduleIdAclMap = ArrayListMultimap.create();
+
+        for(AclRoleVo aclRoleVo : aclVoList){
+
+            if(aclRoleVo.getStatus() == 1){
+                moduleIdAclMap.put(aclRoleVo.getAclModuleId(), aclRoleVo);
+            }
+        }
+        bindAclsWithOrder(aclModuleTree, moduleIdAclMap);
+        return aclModuleTree;
+    }
+
+    private void bindAclsWithOrder(List<AclModuleLevelVo> aclModuleLevelVoList, Multimap<Integer, AclRoleVo> moduleIdAclMap){
+
+        if(CollectionUtils.isEmpty(aclModuleLevelVoList)){
+            return;
+        }
+
+        for(AclModuleLevelVo aclModuleLevelVo : aclModuleLevelVoList){
+            List<AclRoleVo> aclRoleVoList = (List<AclRoleVo>)moduleIdAclMap.get(Integer.valueOf(String.valueOf(aclModuleLevelVo.getId())));
+            if(CollectionUtils.isNotEmpty(aclRoleVoList)){
+                Collections.sort(aclRoleVoList, aclSeqComparator);
+                aclModuleLevelVo.setAclList(aclRoleVoList);
+            }
+            bindAclsWithOrder(aclModuleLevelVo.getAclModuleList(), moduleIdAclMap);
+        }
+    }
 
     /**
      * 功能描述: <br>
@@ -275,9 +354,15 @@ public class SysTreeService {
      * @Date: 2018/7/5 0005 13:46
      */
     private Comparator<AclModuleLevelVo> aclModuleSeqComparator = new Comparator<AclModuleLevelVo>() {
-
         @Override
         public int compare(AclModuleLevelVo o1, AclModuleLevelVo o2) {
+            return o1.getSeq() - o2.getSeq();
+        }
+    };
+
+    private Comparator<AclRoleVo> aclSeqComparator = new Comparator<AclRoleVo>() {
+        @Override
+        public int compare(AclRoleVo o1, AclRoleVo o2) {
             return o1.getSeq() - o2.getSeq();
         }
     };

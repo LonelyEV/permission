@@ -12,6 +12,7 @@
 package ones.quzhigang.permission.vo;
 
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,6 +26,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(of = {"id"})
 public class AclVo {
 
     private Long id;

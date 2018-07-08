@@ -96,6 +96,8 @@ public interface SysRoleAclService{
 	 * @since JDK 1.8
 	 */
 	 int fetchPageAdvanceCount(SysRoleAclQuery query);
+
+	 void changeAcls(Long roleId, String aclsIds);
 	
 	
 

@@ -14,13 +14,22 @@ package ones.quzhigang.permission.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import ones.quzhigang.permission.common.JsonData;
+import ones.quzhigang.permission.service.SysRoleAclService;
 import ones.quzhigang.permission.service.SysRoleService;
+import ones.quzhigang.permission.service.SysTreeService;
 import ones.quzhigang.permission.vo.RoleVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/sys/role")
@@ -30,6 +39,12 @@ public class RoleController {
 
     @Autowired
     private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysTreeService sysTreeService;
+
+    @Autowired
+    private SysRoleAclService sysRoleAclService;
 
     @RequestMapping("/role.page")
     public ModelAndView role(){
@@ -54,5 +69,25 @@ public class RoleController {
     @ResponseBody
     public JsonData list(){
         return JsonData.sucess(sysRoleService.getAll());
+    }
+
+    @RequestMapping("/roleTree.json")
+    @ResponseBody
+    public JsonData roleTree(@Param("roleId") Long roleId){
+        return JsonData.sucess(sysTreeService.roleTrss(roleId));
+    }
+
+    @RequestMapping("/changeAcls.json")
+    @ResponseBody
+    public JsonData changeAcls(@Param("roleId") Long roleId, @RequestParam(value = "aclIds", required = false, defaultValue = "") String aclIds){
+        sysRoleAclService.changeAcls(roleId, aclIds);
+        return JsonData.sucess();
+    }
+
+    public static void main(String args[]){
+        List<Long> cities = Arrays.asList(1L, 2L, 3L, 6L);
+        List<String> listIds = cities.stream().map(s -> String.valueOf(s)).collect(Collectors.toList());
+        String citiesCommaSeparated = String.join(",", listIds);
+        System.out.println(citiesCommaSeparated);
     }
 }

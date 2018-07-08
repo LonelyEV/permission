@@ -27,6 +27,8 @@ public class AclModuleLevelVo extends SysAclModuleModel {
 
     private List<AclModuleLevelVo> aclModuleList = Lists.newArrayList();
 
+    private List<AclRoleVo> aclList = Lists.newArrayList();
+
     public static AclModuleLevelVo acl(SysAclModuleModel sysAclModuleModel){
 
         AclModuleLevelVo vo = new AclModuleLevelVo();

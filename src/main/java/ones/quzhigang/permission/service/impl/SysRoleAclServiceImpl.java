@@ -1,8 +1,17 @@
 package ones.quzhigang.permission.service.impl;
 
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import ones.quzhigang.permission.common.RequestHolder;
+import ones.quzhigang.permission.utils.IpUtil;
+import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
+import ones.quzhigang.permission.utils.StringUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +20,9 @@ import ones.quzhigang.permission.model.SysRoleAclModel;
 
 import ones.quzhigang.permission.query.SysRoleAclQuery;
 import ones.quzhigang.permission.service.SysRoleAclService;
+import org.springframework.transaction.annotation.Transactional;
 
-    
+
 @Service
 public class SysRoleAclServiceImpl implements SysRoleAclService{
 	@Autowired
@@ -56,7 +66,59 @@ public class SysRoleAclServiceImpl implements SysRoleAclService{
 	    		return sysRoleAclMapper.fetchPageAdvanceCount(query);
 	}
 
-	
-	
+	@Override
+	public void changeAcls(Long roleId, String aclsIds) {
 
+		List<Long> ids = StringUtil.splitToListInt(aclsIds);
+		List<String> tempIds = ids.stream().map(s -> String.valueOf(s)).collect(Collectors.toList());
+		String idsCommaSeparated = String.join(",", tempIds);
+
+    	List<Long> originAclIdList = sysRoleAclMapper.getAclIdListByRoleIdList("'"+roleId+"'");
+
+    	if(CollectionUtils.isNotEmpty(originAclIdList)){
+
+    		if(originAclIdList.size() == ids.size()){
+
+				Set<Long> originAclIdSet = Sets.newHashSet(originAclIdList);
+				Set<Long> aclIdSet = Sets.newHashSet(ids);
+
+				originAclIdSet.removeAll(aclIdSet);
+
+				if(CollectionUtils.isEmpty(originAclIdSet)){
+					return;
+				}
+			}
+		}
+		updateRoleAcls(roleId, ids);
+	}
+
+	@SuppressWarnings("AlibabaTransactionMustHaveRollback")
+	@Transactional
+	public void updateRoleAcls(Long roleId, List<Long> aclsIds){
+
+		sysRoleAclMapper.deleteByRoleId(roleId);
+
+		if(CollectionUtils.isEmpty(aclsIds)){
+			return;
+		}
+
+		List<SysRoleAclModel> sysRoleAclModelList = Lists.newArrayList();
+
+		for(Long aclId :aclsIds){
+
+			SysRoleAclModel sysRoleAclModel =SysRoleAclModel.builder().roleId(Integer.valueOf(String.valueOf(roleId)))
+					.aclId(Integer.valueOf(String.valueOf(aclId)))
+					.operator(RequestHolder.getCurrentUser().getUsername())
+					.operateIp(IpUtil.getUserIP(RequestHolder.getCurrentRequest()))
+					.operateTime(SimpleDataFormatUtil.format(new Date(), SimpleDataFormatUtil.DEFAULT_PATTERN)).build();
+
+			sysRoleAclModelList.add(sysRoleAclModel);
+		}
+
+		Map<String, List<SysRoleAclModel>> batchInsertMap = new HashMap<>();
+		batchInsertMap.put("list", sysRoleAclModelList);
+		if(MapUtils.isNotEmpty(batchInsertMap)){
+			sysRoleAclMapper.batchInsert(batchInsertMap);
+		}
+	}
 }

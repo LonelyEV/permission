@@ -11,46 +11,41 @@ public interface  SysRoleMapper{
 	
 
 																																																																																																																				
-	public String columns="id,name,type,status,remark,operator,operate_time,operate_ip";
+	String columns="id,name,type,status,remark,operator,operate_time,operate_ip";
 	
-	public String insert="name,type,status,remark,operator,operate_time,operate_ip";
+	String insert="name,type,status,remark,operator,operate_time,operate_ip";
 																																																																																																												
-	public String property="#{id},#{name},#{type},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
+	String property="#{id},#{name},#{type},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
 	
-	public String insertProperty="#{name},#{type},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
+	String insertProperty="#{name},#{type},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
 																																																																																																																				
-	public String update="name=#{name},type=#{type},status=#{status},remark=#{remark},operator=#{operator},operate_time=#{operateTime},operate_ip=#{operateIp}";
+	String update="name=#{name},type=#{type},status=#{status},remark=#{remark},operator=#{operator},operate_time=#{operateTime},operate_ip=#{operateIp}";
 	
 	@Select("select "+columns+" from tbl_sys_role where ID=#{id}")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysRoleMapper.SysRoleModelMap")
-	public SysRoleModel getById(long id);
+	SysRoleModel getById(long id);
 	
 	@Insert("insert into tbl_sys_role ("+insert+") values ("+insertProperty+")")
 	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
-	public long insert(SysRoleModel sysRole);
+	long insert(SysRoleModel sysRole);
 
 	@Update("update tbl_sys_role set "+update+" where ID=#{id}")
-	public long update(SysRoleModel sysRole); 
+	long update(SysRoleModel sysRole);
 	
 	@Delete("delete from tbl_sys_role where 1 = 1 and ID=#{id} ")
-	public void delById(long id);
+	void delById(long id);
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysRoleProvider.class,method="fetchPageAdvance")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysRoleMapper.SysRoleModelMap")
-	public List<SysRoleModel> fetchPageAdvance(SysRoleQuery query);  
-	
+	List<SysRoleModel> fetchPageAdvance(SysRoleQuery query);
 	
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysRoleProvider.class,method="fetchPageAdvanceCount")
-	public int fetchPageAdvanceCount(SysRoleQuery query);
+	int fetchPageAdvanceCount(SysRoleQuery query);
 
 	@Select("select "+columns+" from tbl_sys_role ")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysRoleMapper.SysRoleModelMap")
-	public List<SysRoleModel> getAll();
+	List<SysRoleModel> getAll();
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysRoleProvider.class,method="countByNameAndId")
-	public int countByNameAndId(@Param("name") String name, @Param("id") Long id);
-	
-	
-	
-	
+	int countByNameAndId(@Param("name") String name, @Param("id") Long id);
 }

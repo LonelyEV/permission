@@ -12,41 +12,41 @@ public interface  SysUserMapper{
 	
 
 																																																																																																																				
-	public String columns="id,username,telephone,mail,password,dept_id,status,remark,operator,operate_time,operate_ip";
+	String columns="id,username,telephone,mail,password,dept_id,status,remark,operator,operate_time,operate_ip";
 	
-	public String insert="username,telephone,mail,password,dept_id,status,remark,operator,operate_time,operate_ip";
+	String insert="username,telephone,mail,password,dept_id,status,remark,operator,operate_time,operate_ip";
 																																																																																																												
-	public String property="#{id},#{username},#{telephone},#{mail},#{password},#{deptId},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
+	String property="#{id},#{username},#{telephone},#{mail},#{password},#{deptId},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
 	
-	public String insertProperty="#{username},#{telephone},#{mail},#{password},#{deptId},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
+	String insertProperty="#{username},#{telephone},#{mail},#{password},#{deptId},#{status},#{remark},#{operator},#{operateTime},#{operateIp}";
 																																																																																																																				
-	public String update="username=#{username},telephone=#{telephone},mail=#{mail},password=#{password},dept_id=#{deptId},status=#{status},remark=#{remark},operator=#{operator},operate_time=#{operateTime},operate_ip=#{operateIp}";
+	String update="username=#{username},telephone=#{telephone},mail=#{mail},password=#{password},dept_id=#{deptId},status=#{status},remark=#{remark},operator=#{operator},operate_time=#{operateTime},operate_ip=#{operateIp}";
 	
 	@Select("select "+columns+" from tbl_sys_user where ID=#{id}")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
-	public SysUserModel getById(long id);
+	SysUserModel getById(long id);
 
 	@Select("select "+columns+" from tbl_sys_user where 1=1 and  telephone=#{keyWords} or mail = #{keyWords} ")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
-	public SysUserModel findByKeyWords(@Param("keyWords") String keyWords);
+	SysUserModel findByKeyWords(@Param("keyWords") String keyWords);
 	
 	@Insert("insert into tbl_sys_user ("+insert+") values ("+insertProperty+")")
 	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
-	public long insert(SysUserModel sysUser);
+	long insert(SysUserModel sysUser);
 
 	@Update("update tbl_sys_user set "+update+" where ID=#{id}")
-	public long update(SysUserModel sysUser); 
+	long update(SysUserModel sysUser);
 	
 	@Delete("delete from tbl_sys_user where 1 = 1 and ID=#{id} ")
-	public void delById(long id);
+	void delById(long id);
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysUserProvider.class,method="fetchPageAdvance")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysUserMapper.SysUserModelMap")
-	public List<SysUserModel> fetchPageAdvance(SysUserQuery query);  
+	List<SysUserModel> fetchPageAdvance(SysUserQuery query);
 	
 	
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysUserProvider.class,method="fetchPageAdvanceCount")
-	public int fetchPageAdvanceCount(SysUserQuery query);
+	int fetchPageAdvanceCount(SysUserQuery query);
 
 	@Select("select count(1) from tbl_sys_user where telephone = #{telephone} and id <> #{userId} ")
 	int countByTelephoneForUp(@Param("telephone") String telephone, @Param("userId") Long userId);
@@ -68,7 +68,4 @@ public interface  SysUserMapper{
 
 	@Select("select count(1) from tbl_sys_user where dept_id = #{deptId} ")
 	int countByDeptId(@Param("deptId") Integer deptId);
-	
-	
-	
 }

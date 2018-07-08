@@ -1,17 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>  
-<!DOCTYPE mapper  
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ones.quzhigang.permission.mapper.SysRoleAclMapper">
-	    <resultMap type="ones.quzhigang.permission.model.SysRoleAclModel" id="SysRoleAclModelMap">
-	    
-	    	 	    	    <result property="id" column="id" />
-	    	    			 	    	    <result property="roleId" column="role_id" />
-	    	    			 	    	    <result property="aclId" column="acl_id" />
-	    	    			 	    	    <result property="operator" column="operator" />
-	    	    			 	    	    <result property="operateTime" column="operate_time" />
-	    	    			 	    	    <result property="operateIp" column="operate_ip" />
-	    	    			 		</resultMap>
+	<resultMap type="ones.quzhigang.permission.model.SysRoleAclModel" id="SysRoleAclModelMap">
+
+		<result property="id" column="id"/>
+		<result property="roleId" column="role_id"/>
+		<result property="aclId" column="acl_id"/>
+		<result property="operator" column="operator"/>
+		<result property="operateTime" column="operate_time"/>
+		<result property="operateIp" column="operate_ip"/>
+	</resultMap>
+
+	<resultMap type="java.lang.Long" id="SysRoleAclAclIdModelMap">
+		<result property="aclId" column="acl_id" javaType="Long"/>
+	</resultMap>
 
 </mapper>
 
