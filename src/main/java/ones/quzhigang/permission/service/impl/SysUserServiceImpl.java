@@ -11,6 +11,7 @@ import ones.quzhigang.permission.beans.PageResult;
 import ones.quzhigang.permission.common.BeanValidator;
 import ones.quzhigang.permission.common.RequestHolder;
 import ones.quzhigang.permission.exception.ParamException;
+import ones.quzhigang.permission.service.SysLogService;
 import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.MD5Util;
 import ones.quzhigang.permission.utils.PasswordUtil;
@@ -30,6 +31,9 @@ import ones.quzhigang.permission.service.SysUserService;
 public class SysUserServiceImpl implements SysUserService{
 	@Autowired
 	private SysUserMapper sysUserMapper;
+
+	@Autowired
+	private SysLogService sysLogService;
 
 	
 	//根据ID查询指定的数据
@@ -72,9 +76,14 @@ public class SysUserServiceImpl implements SysUserService{
 
 		// Todo: 发送邮件
 
-		// 插入数据库
-		return sysUserMapper.insert(sysUserModel);
 
+
+		// 插入数据库
+		long result =  sysUserMapper.insert(sysUserModel);
+		// 保存操作日志
+		sysLogService.saveUserLog(null, sysUserModel);
+
+		return result;
 	}
 
 	private boolean checkTelephoneExist(String telephone, Long userId, boolean newFlag){
@@ -115,16 +124,19 @@ public class SysUserServiceImpl implements SysUserService{
 
 
 		// 构建 SysUser对象
-		SysUserModel after = SysUserModel.builder().username(userVo.getUsername()).telephone(userVo.getTelephone())
-				.mail(userVo.getMail()).deptId(userVo.getDeptId()).status(userVo.getStatus())
+		SysUserModel after = SysUserModel.builder().id(before.getId()).username(userVo.getUsername()).telephone(userVo.getTelephone())
+				.password(before.getPassword()).mail(userVo.getMail()).deptId(userVo.getDeptId()).status(userVo.getStatus())
 				.remark(userVo.getRemark()).build();
 
-		after.setOperator("system");
-		after.setOperateIp("");
+		after.setOperator(RequestHolder.getCurrentUser().getUsername());
+		after.setOperateIp(IpUtil.getUserIP(RequestHolder.getCurrentRequest()));
 		after.setOperateTime(SimpleDataFormatUtil.format(new Date(), SimpleDataFormatUtil.DEFAULT_PATTERN));
 
+		long result = sysUserMapper.update(after);
+		// 保存操作日志
+		sysLogService.saveUserLog(before, after);
 
-		return sysUserMapper.update(after);
+		return result;
 	}
 	
 	//高级查询 

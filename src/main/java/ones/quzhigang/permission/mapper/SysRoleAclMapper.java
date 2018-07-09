@@ -28,7 +28,7 @@ public interface  SysRoleAclMapper{
 	SysRoleAclModel getById(long id);
 	
 	@Insert("insert into tbl_sys_role_acl ("+insert+") values ("+insertProperty+")")
-	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
+	@Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
 	long insert(SysRoleAclModel sysRoleAcl);
 
 	@Update("update tbl_sys_role_acl set "+update+" where ID=#{id}")

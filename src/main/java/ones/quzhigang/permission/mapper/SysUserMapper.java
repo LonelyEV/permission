@@ -35,7 +35,7 @@ public interface  SysUserMapper{
 	SysUserModel findByKeyWords(@Param("keyWords") String keyWords);
 	
 	@Insert("insert into tbl_sys_user ("+insert+") values ("+insertProperty+")")
-	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
+	@Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
 	long insert(SysUserModel sysUser);
 
 	@Update("update tbl_sys_user set "+update+" where ID=#{id}")

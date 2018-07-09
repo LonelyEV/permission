@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.*;
 
 import ones.quzhigang.permission.model.SysDeptModel;
 import ones.quzhigang.permission.query.SysDeptQuery;
+import org.apache.ibatis.mapping.StatementType;
 
 @Mapper
 public interface  SysDeptMapper{
@@ -27,7 +28,7 @@ public interface  SysDeptMapper{
 	SysDeptModel getById(long id);
 	
 	@Insert("insert into tbl_sys_dept ("+insert+") values ("+insertProperty+")")
-	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
+	@Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
 	long insert(SysDeptModel sysDept);
 
 	@Update("update tbl_sys_dept set "+update+" where ID=#{id}")

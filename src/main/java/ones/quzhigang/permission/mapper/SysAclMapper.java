@@ -27,7 +27,7 @@ public interface  SysAclMapper{
 	SysAclModel getById(long id);
 	
 	@Insert("insert into tbl_sys_acl ("+insert+") values ("+insertProperty+")")
-	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
+	@Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
 	long insert(SysAclModel sysAcl);
 
 	@Update("update tbl_sys_acl set "+update+" where ID=#{id}")

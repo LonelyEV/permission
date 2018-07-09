@@ -6,9 +6,14 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import ones.quzhigang.permission.beans.LogType;
+import ones.quzhigang.permission.common.JsonMapper;
 import ones.quzhigang.permission.common.RequestHolder;
+import ones.quzhigang.permission.mapper.SysLogMapper;
 import ones.quzhigang.permission.mapper.SysUserMapper;
+import ones.quzhigang.permission.model.SysLogModel;
 import ones.quzhigang.permission.model.SysUserModel;
+import ones.quzhigang.permission.service.SysLogService;
 import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
 import ones.quzhigang.permission.utils.StringUtil;
@@ -33,7 +38,8 @@ public class SysRoleUserServiceImpl implements SysRoleUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
-
+    @Autowired
+    private SysLogMapper sysLogMapper;
 
     //根据ID查询指定的数据
     @Override
@@ -51,7 +57,6 @@ public class SysRoleUserServiceImpl implements SysRoleUserService {
     @Override
     public long insert(SysRoleUserModel sysRoleUser) {
         return sysRoleUserMapper.insert(sysRoleUser);
-
     }
 
     //修改
@@ -71,8 +76,6 @@ public class SysRoleUserServiceImpl implements SysRoleUserService {
     public int fetchPageAdvanceCount(SysRoleUserQuery query) {
         return sysRoleUserMapper.fetchPageAdvanceCount(query);
     }
-
-
 
     @Override
     public List<SysUserModel> getListByRoleId(Long roleId) {
@@ -119,7 +122,9 @@ public class SysRoleUserServiceImpl implements SysRoleUserService {
                 }
             }
         }
+
         updateRoleUsers(roleId, ids);
+        saveRoleuserLog(roleId, userIdList, ids);
     }
 
     @SuppressWarnings("AlibabaTransactionMustHaveRollback")
@@ -150,6 +155,22 @@ public class SysRoleUserServiceImpl implements SysRoleUserService {
         if(MapUtils.isNotEmpty(batchInsertMap)){
             sysRoleUserMapper.batchInsert(batchInsertMap);
         }
+    }
+
+    private void saveRoleuserLog(Long roleId, List<Long> before, List<Long> after) {
+
+        Integer targetId = Integer.valueOf(String.valueOf(roleId));
+        String oldValue = before == null ? "" : JsonMapper.obj2String(before);
+        String newValue = after == null ? "" : JsonMapper.obj2String(after);
+
+        SysLogModel sysLogModel = SysLogModel.builder().type(LogType.TYPE_ROLE_USER)
+                .targetId(targetId).oldValue(oldValue).newValue(newValue)
+                .operator(RequestHolder.getCurrentUser().getUsername())
+                .operateIp(IpUtil.getUserIP(RequestHolder.getCurrentRequest()))
+                .operateTime(SimpleDataFormatUtil.format(new Date(), SimpleDataFormatUtil.DEFAULT_PATTERN)).status(1)
+                .build();
+
+        sysLogMapper.insert(sysLogModel);
     }
 
 

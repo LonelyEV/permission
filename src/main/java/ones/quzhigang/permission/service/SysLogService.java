@@ -1,7 +1,10 @@
 package ones.quzhigang.permission.service;
 
-import ones.quzhigang.permission.model.SysLogModel;
+import ones.quzhigang.permission.beans.PageQuery;
+import ones.quzhigang.permission.beans.PageResult;
+import ones.quzhigang.permission.model.*;
 import ones.quzhigang.permission.query.SysLogQuery;
+import ones.quzhigang.permission.vo.SearchLogQueryVo;
 
 import java.util.List;
 
@@ -66,36 +69,24 @@ public interface SysLogService{
 	 * @since JDK 1.8
 	 */
 	 long update(SysLogModel sysLog);
-	
-	/**
-	 * 
-	 * fetchPageAdvance:(高级查询带分页). <br/>
-	 * TODO(这里描述这个方法适用条件 – 可选).<br/>
-	 * TODO(这里描述这个方法的执行流程 – 可选).<br/>
-	 * TODO(这里描述这个方法的使用方法 – 可选).<br/>
-	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
-	 *
-	 * @author 系统生成   
-	 * @param query
-	 * @return
-	 * @since JDK 1.8
-	 */
-	 List<SysLogModel> fetchPageAdvance(SysLogQuery query);
-	
-		/**
-	 * 
-	 * fetchPageAdvanceCount:(高级查询总记录数). <br/>
-	 * TODO(这里描述这个方法适用条件 – 可选).<br/>
-	 * TODO(这里描述这个方法的执行流程 – 可选).<br/>
-	 * TODO(这里描述这个方法的使用方法 – 可选).<br/>
-	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
-	 *
-	 * @author 系统生成
-	 * @param query
-	 * @return
-	 * @since JDK 1.8
-	 */
-	 int fetchPageAdvanceCount(SysLogQuery query);
+
+	 void saveDeptLog(SysDeptModel before, SysDeptModel after);
+
+	 void saveUserLog(SysUserModel before, SysUserModel after);
+
+	 void saveAclModuleLog(SysAclModuleModel before, SysAclModuleModel after);
+
+	 void saveAclLog(SysAclModel before, SysAclModel after);
+
+	 void saveRoleLog(SysRoleModel before, SysRoleModel after);
+
+	 void saveRoleAclLog(Long roleId, List<Long> before, List<Long> after);
+
+	 void saveRoleuserLog(Long roleId, List<Long> before, List<Long> after);
+
+	 PageResult<SysLogModel> searchpageList(SearchLogQueryVo queryVo);
+
+	 void recover(Long id);
 	
 	
 

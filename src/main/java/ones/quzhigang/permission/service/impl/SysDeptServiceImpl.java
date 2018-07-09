@@ -11,6 +11,7 @@ import ones.quzhigang.permission.common.RequestHolder;
 import ones.quzhigang.permission.exception.ParamException;
 import ones.quzhigang.permission.exception.PermissionException;
 import ones.quzhigang.permission.mapper.SysUserMapper;
+import ones.quzhigang.permission.service.SysLogService;
 import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.LevelUtil;
 import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
@@ -36,6 +37,9 @@ public class SysDeptServiceImpl implements SysDeptService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private SysLogService sysLogService;
 
 
     //根据ID查询指定的数据
@@ -81,8 +85,12 @@ public class SysDeptServiceImpl implements SysDeptService {
         sysDeptModel.setOperateIp(IpUtil.getUserIP(RequestHolder.getCurrentRequest()));
         sysDeptModel.setOperateTime(SimpleDataFormatUtil.format(new Date(), SimpleDataFormatUtil.DEFAULT_PATTERN));
 
-        return sysDeptMapper.insert(sysDeptModel);
+        long result =  sysDeptMapper.insert(sysDeptModel);
 
+        // 保存操作日志
+        sysLogService.saveDeptLog(null, sysDeptModel);
+
+        return result;
     }
 
     private boolean checkExist(Integer parentId, String departmentName, Long id) {
@@ -115,7 +123,7 @@ public class SysDeptServiceImpl implements SysDeptService {
         SysDeptModel before = sysDeptMapper.getById(vo.getId());
         Preconditions.checkNotNull(before, "待更新的部门不存在！");
 
-        SysDeptModel after = SysDeptModel.builder().id(vo.getId()).name(vo.getName())
+        SysDeptModel after = SysDeptModel.builder().id(before.getId()).name(vo.getName())
                 .parentId(vo.getParentId()).seq(vo.getSeq()).remark(vo.getRemark()).build();
 
         after.setLevel(LevelUtil.calculatelevel(getLevel(vo.getParentId()), vo.getParentId()));
@@ -125,7 +133,11 @@ public class SysDeptServiceImpl implements SysDeptService {
 
         updateWithChild(before, after);
 
-        return sysDeptMapper.update(after);
+        long result = sysDeptMapper.update(after);
+        // 保存操作日志
+        sysLogService.saveDeptLog(before, after);
+
+        return result;
     }
 
     @Transactional

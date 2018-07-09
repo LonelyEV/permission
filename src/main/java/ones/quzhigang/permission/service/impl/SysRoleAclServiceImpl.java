@@ -6,7 +6,12 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import ones.quzhigang.permission.beans.LogType;
+import ones.quzhigang.permission.common.JsonMapper;
 import ones.quzhigang.permission.common.RequestHolder;
+import ones.quzhigang.permission.mapper.SysLogMapper;
+import ones.quzhigang.permission.model.SysLogModel;
+import ones.quzhigang.permission.service.SysLogService;
 import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
 import ones.quzhigang.permission.utils.StringUtil;
@@ -28,7 +33,9 @@ public class SysRoleAclServiceImpl implements SysRoleAclService{
 	@Autowired
 	private SysRoleAclMapper sysRoleAclMapper;
 
-	
+	@Autowired
+	private SysLogMapper sysLogMapper;
+
 	//根据ID查询指定的数据
     @Override
 	public SysRoleAclModel getById(long id){ 
@@ -40,30 +47,29 @@ public class SysRoleAclServiceImpl implements SysRoleAclService{
 	public void delById(long id){
 	    		sysRoleAclMapper.delById(id);
 	}
-	
+
 	//新增
-    @Override
-	public long insert(SysRoleAclModel sysRoleAcl){	
-	    		return sysRoleAclMapper.insert(sysRoleAcl);
-		
+	@Override
+	public long insert(SysRoleAclModel sysRoleAcl) {
+		return sysRoleAclMapper.insert(sysRoleAcl);
 	}
 	
 	//修改
-    @Override
-	public long update(SysRoleAclModel sysRoleAcl){
-	    		return sysRoleAclMapper.update(sysRoleAcl);
+	@Override
+	public long update(SysRoleAclModel sysRoleAcl) {
+		return sysRoleAclMapper.update(sysRoleAcl);
 	}
 	
 	//高级查询 
 	@Override
 	public List<SysRoleAclModel> fetchPageAdvance(SysRoleAclQuery query) {
-	    		return sysRoleAclMapper.fetchPageAdvance(query);
+		return sysRoleAclMapper.fetchPageAdvance(query);
 	}
 	
 	//高级查询总记录数
 	@Override
 	public int fetchPageAdvanceCount(SysRoleAclQuery query) {
-	    		return sysRoleAclMapper.fetchPageAdvanceCount(query);
+		return sysRoleAclMapper.fetchPageAdvanceCount(query);
 	}
 
 
@@ -92,6 +98,8 @@ public class SysRoleAclServiceImpl implements SysRoleAclService{
 			}
 		}
 		updateRoleAcls(roleId, ids);
+    	// 保存操作日志
+    	saveRoleAclLog(roleId, originAclIdList, ids);
 	}
 
 	@SuppressWarnings("AlibabaTransactionMustHaveRollback")
@@ -122,6 +130,22 @@ public class SysRoleAclServiceImpl implements SysRoleAclService{
 		if(MapUtils.isNotEmpty(batchInsertMap)){
 			sysRoleAclMapper.batchInsert(batchInsertMap);
 		}
+	}
+
+	private void saveRoleAclLog(Long roleId, List<Long> before, List<Long> after) {
+
+		Integer targetId = Integer.valueOf(String.valueOf(roleId));
+		String oldValue = before == null ? "" : JsonMapper.obj2String(before);
+		String newValue = after == null ? "" : JsonMapper.obj2String(after);
+
+		SysLogModel sysLogModel = SysLogModel.builder().type(LogType.TYPE_ROLE_ACL)
+				.targetId(targetId).oldValue(oldValue).newValue(newValue)
+				.operator(RequestHolder.getCurrentUser().getUsername())
+				.operateIp(IpUtil.getUserIP(RequestHolder.getCurrentRequest()))
+				.operateTime(SimpleDataFormatUtil.format(new Date(), SimpleDataFormatUtil.DEFAULT_PATTERN)).status(1)
+				.build();
+
+		sysLogMapper.insert(sysLogModel);
 	}
 
 

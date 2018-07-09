@@ -13,6 +13,7 @@ import ones.quzhigang.permission.exception.PermissionException;
 import ones.quzhigang.permission.mapper.SysRoleUserMapper;
 import ones.quzhigang.permission.mapper.SysUserMapper;
 import ones.quzhigang.permission.model.SysUserModel;
+import ones.quzhigang.permission.service.SysLogService;
 import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
 import ones.quzhigang.permission.utils.StringUtil;
@@ -39,6 +40,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private SysLogService sysLogService;
 
 
 	//根据ID查询指定的数据
@@ -73,7 +77,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 		// 持久化对象
         long result = sysRoleMapper.insert(sysRoleModel);
 		// 记录操作日志
-
+        sysLogService.saveRoleLog(null, sysRoleModel);
 		return result;
 	}
 
@@ -95,9 +99,8 @@ public class SysRoleServiceImpl implements SysRoleService {
         SysRoleModel before = sysRoleMapper.getById(vo.getId());
         Preconditions.checkNotNull(before, "带更新的角色不存在");
 
-
         // 组装参数
-        SysRoleModel after = SysRoleModel.builder().id(vo.getId()).name(vo.getName()).type(vo.getType()).status(vo.getStatus())
+        SysRoleModel after = SysRoleModel.builder().id(before.getId()).name(vo.getName()).type(vo.getType()).status(vo.getStatus())
                 .remark(vo.getRemark()).build();
         after.setOperator(RequestHolder.getCurrentUser().getUsername());
         after.setOperateIp(IpUtil.getUserIP(RequestHolder.getCurrentRequest()));
@@ -106,6 +109,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         // 持久化对象
         long result = sysRoleMapper.update(after);
         // 记录操作日志
+        sysLogService.saveRoleLog(before, after);
 
         return result;
 	}

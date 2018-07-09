@@ -11,6 +11,7 @@ import ones.quzhigang.permission.common.BeanValidator;
 import ones.quzhigang.permission.common.RequestHolder;
 import ones.quzhigang.permission.exception.PermissionException;
 import ones.quzhigang.permission.model.SysUserModel;
+import ones.quzhigang.permission.service.SysLogService;
 import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
 import ones.quzhigang.permission.vo.AclVo;
@@ -28,6 +29,9 @@ import ones.quzhigang.permission.service.SysAclService;
 public class SysAclServiceImpl implements SysAclService{
 	@Autowired
 	private SysAclMapper sysAclMapper;
+
+	@Autowired
+	private SysLogService sysLogService;
 
 	
 	//根据ID查询指定的数据
@@ -63,7 +67,7 @@ public class SysAclServiceImpl implements SysAclService{
 		// 持久化到数据库
 		long result = sysAclMapper.insert(sysAclModel);
 		// 保存操作日志
-
+		sysLogService.saveAclLog(null, sysAclModel);
 
 		return result;
 		
@@ -85,7 +89,7 @@ public class SysAclServiceImpl implements SysAclService{
 		Preconditions.checkNotNull(before, "带更新的部门不存在");
 
 		// 组装参数
-		SysAclModel after = SysAclModel.builder().id(vo.getId()).code(before.getCode()).name(vo.getName())
+		SysAclModel after = SysAclModel.builder().id(before.getId()).code(before.getCode()).name(vo.getName())
 				.aclModuleId(vo.getAclModuleId()).url(vo.getUrl()).type(vo.getType())
 				.status(vo.getStatus()).seq(vo.getSeq()).remark(vo.getRemark()).build();
 		after.setOperator(RequestHolder.getCurrentUser().getUsername());
@@ -95,7 +99,7 @@ public class SysAclServiceImpl implements SysAclService{
 		// 持久化到数据库
 		long result = sysAclMapper.update(after);
 		// 保存操作日志
-
+		sysLogService.saveAclLog(before, after);
 		return result;
 	}
 

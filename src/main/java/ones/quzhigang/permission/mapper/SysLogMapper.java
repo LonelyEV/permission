@@ -1,14 +1,9 @@
 package ones.quzhigang.permission.mapper;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectKey;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
+import ones.quzhigang.permission.beans.PageQuery;
+import ones.quzhigang.permission.vo.SearchLogQueryVo;
+import org.apache.ibatis.annotations.*;
 
 import ones.quzhigang.permission.model.SysLogModel;
 import ones.quzhigang.permission.query.SysLogQuery;
@@ -33,7 +28,7 @@ public interface  SysLogMapper{
 	SysLogModel getById(long id);
 	
 	@Insert("insert into tbl_sys_log ("+insert+") values ("+insertProperty+")")
-	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
+	@Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
 	long insert(SysLogModel sysLog);
 
 	@Update("update tbl_sys_log set "+update+" where ID=#{id}")
@@ -44,11 +39,11 @@ public interface  SysLogMapper{
 
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysLogProvider.class,method="fetchPageAdvance")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysLogMapper.SysLogModelMap")
-	List<SysLogModel> fetchPageAdvance(SysLogQuery query);
-	
-	
+	List<SysLogModel> fetchPageAdvance(@Param("query") SearchLogQueryVo query);
+
+
 	@SelectProvider(type=ones.quzhigang.permission.provider.SysLogProvider.class,method="fetchPageAdvanceCount")
-	int fetchPageAdvanceCount(SysLogQuery query);
+	int fetchPageAdvanceCount(SearchLogQueryVo query);
 	
 	
 	

@@ -12,6 +12,7 @@ import ones.quzhigang.permission.common.RequestHolder;
 import ones.quzhigang.permission.exception.PermissionException;
 import ones.quzhigang.permission.mapper.SysAclMapper;
 import ones.quzhigang.permission.model.SysDeptModel;
+import ones.quzhigang.permission.service.SysLogService;
 import ones.quzhigang.permission.utils.IpUtil;
 import ones.quzhigang.permission.utils.LevelUtil;
 import ones.quzhigang.permission.utils.SimpleDataFormatUtil;
@@ -36,6 +37,9 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
 
     @Autowired
     private SysAclMapper sysAclMapper;
+
+    @Autowired
+    private SysLogService sysLogService;
 
 
     //根据ID查询指定的数据
@@ -83,10 +87,9 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
         // 持久化数据
         long result = sysAclModuleMapper.insert(sysAclModuleModel);
         // 记录操作日志
-
+        sysLogService.saveAclModuleLog(null, sysAclModuleModel);
 
         return result;
-
     }
 
     private boolean checkExist(Integer parentId, String name, Long id) {
@@ -109,10 +112,8 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
         if (before == null) {
             throw new PermissionException("要更新的权限模块不存在");
         }
-
-
         // 组装参数
-        SysAclModuleModel after = SysAclModuleModel.builder().id(vo.getId()).name(vo.getName()).parentId(vo.getParentId())
+        SysAclModuleModel after = SysAclModuleModel.builder().id(before.getId()).name(vo.getName()).parentId(vo.getParentId())
                 .seq(vo.getSeq()).status(vo.getStatus()).remark(vo.getRemark()).build();
         after.setLevel(LevelUtil.calculatelevel(getLevel(vo.getParentId()), vo.getParentId()));
         after.setOperator(RequestHolder.getCurrentUser().getUsername());
@@ -121,10 +122,11 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
 
         // 持久化数据
         updateWithChild(before, after);
-
+        long result = sysAclModuleMapper.update(after);
         //记录操作日志
+        sysLogService.saveAclModuleLog(before, after);
 
-        return sysAclModuleMapper.update(after);
+        return result;
     }
 
     private String getLevel(long id) {

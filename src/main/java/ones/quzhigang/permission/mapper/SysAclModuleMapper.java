@@ -28,7 +28,8 @@ public interface  SysAclModuleMapper{
 	SysAclModuleModel getById(long id);
 	
 	@Insert("insert into tbl_sys_acl_module ("+insert+") values ("+insertProperty+")")
-	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
+	//@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
+	@Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
 	long insert(SysAclModuleModel sysAclModule);
 
 	@Update("update tbl_sys_acl_module set "+update+" where ID=#{id}")

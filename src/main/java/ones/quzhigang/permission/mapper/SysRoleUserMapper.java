@@ -27,7 +27,7 @@ public interface  SysRoleUserMapper{
 	SysRoleUserModel getById(long id);
 	
 	@Insert("insert into tbl_sys_role_user ("+insert+") values ("+insertProperty+")")
-	@SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
+	@Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
 	long insert(SysRoleUserModel sysRoleUser);
 
 	@Update("update tbl_sys_role_user set "+update+" where ID=#{id}")
