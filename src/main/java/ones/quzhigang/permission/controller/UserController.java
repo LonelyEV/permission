@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
@@ -77,5 +78,10 @@ public class UserController {
         resultMap.put("acls",sysTreeService.userAclTree(userId));
         resultMap.put("roles", sysRoleService.getRolesByUserId(userId));
         return JsonData.sucess(resultMap);
+    }
+
+    @RequestMapping("/noAuth.page")
+    public ModelAndView noAuth(){
+        return new ModelAndView("noAuth");
     }
 }

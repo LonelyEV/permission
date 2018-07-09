@@ -1,14 +1,3 @@
-/**
- * Copyright (C), 2018, 上海米袋融资有限公司
- * ProjectName: permission
- * FileName: ApplicationContextHelper
- * Author:   屈志刚
- * Date:     2018/6/21 0021 23:15
- * Description: spring上下文工具类
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package ones.quzhigang.permission.common;
 
 import org.springframework.beans.BeansException;
@@ -26,22 +15,17 @@ public class ApplicationContextHelper implements ApplicationContextAware {
         applicationContext = context;
     }
 
-    public static <T> T popBean(Class<T> clazz){
-        if(applicationContext == null){
+    public static <T> T popBean(Class<T> clazz) {
+        if (applicationContext == null) {
             return null;
         }
-
         return applicationContext.getBean(clazz);
-
     }
 
-    public static <T> T popBean(String name, Class<T> clazz){
-
-        if(applicationContext == null){
+    public static <T> T popBean(String name, Class<T> clazz) {
+        if (applicationContext == null) {
             return null;
         }
-
         return applicationContext.getBean(name, clazz);
-
     }
 }

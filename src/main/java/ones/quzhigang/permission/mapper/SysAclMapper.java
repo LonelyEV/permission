@@ -61,6 +61,13 @@ public interface  SysAclMapper{
 	@Select("select "+columns+" from tbl_sys_acl where id in (${idListStr}) ")
 	@ResultMap(value="ones.quzhigang.permission.mapper.SysAclMapper.SysAclModelMap")
 	List<SysAclModel> getByIdList(@Param("idListStr") String idListStr);
+
+	// url is not null and url <> ''  #{url} REGEXP url  匹配 path请求的URL
+	@Select("select "+columns+" from tbl_sys_acl where id url = #{url} ")
+	@ResultMap(value="ones.quzhigang.permission.mapper.SysAclMapper.SysAclModelMap")
+	List<SysAclModel> getByUrl(@Param("url") String url);
+
+
 	
 	
 }

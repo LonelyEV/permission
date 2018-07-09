@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,5 +86,38 @@ public class SysCoreService {
 
     private boolean isSuperAdmin(){
         return true;
+    }
+
+    public boolean hasUrlAcl(String url){
+
+        if(isSuperAdmin()){
+            return true;
+        }
+
+        List<SysAclModel> sysAclModelList = sysAclMapper.getByUrl(url);
+
+        if(CollectionUtils.isEmpty(sysAclModelList)){
+            return true;
+        }
+
+        List<SysAclModel> currentUserAclList = getCurrentUserAclList();
+        Set<Long> currentUserAclSet = currentUserAclList.stream().map(sysAclModel -> sysAclModel.getId()).collect(Collectors.toSet());
+
+        boolean haoValidAcl = false;
+
+        for (SysAclModel sysAclModel : sysAclModelList){
+            if(sysAclModel == null || sysAclModel.getStatus() != 1){
+                continue;
+            }
+            haoValidAcl = true;
+            if(currentUserAclSet.contains(sysAclModel.getId())){
+                return true;
+            }
+        }
+
+        if(!haoValidAcl){
+            return true;
+        }
+        return false;
     }
 }
